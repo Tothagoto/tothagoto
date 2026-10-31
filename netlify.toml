@@ -1,2 +1,5 @@
-[functions]
-  included_files = ["netlify/functions/fonts/**"]
+{
+  "dependencies": {
+    "pdfkit": "^0.15.0"
+  }
+}
