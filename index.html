@@ -1,0 +1,3331 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>তথাগত Tothagoto</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* অ্যানিমেটেড ব্যাকগ্রাউন্ড এবং গ্লোবাল ফন্ট */
+    body {
+      font-family: 'Noto Sans Bengali', sans-serif;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+      
+      /* অ্যানিমেটেড নীল-কালো গ্রেডিয়েন্ট */
+      background: linear-gradient(-45deg, #020b1c, #0a1a3c, #0f2b6b, #051433);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ভাসমান শেপের ডিজাইন */
+    .bg-shapes {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .shape {
+      position: absolute;
+      background: rgba(77, 163, 255, 0.08);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      animation: floatAndSpin infinite linear;
+    }
+    .shape.rect { border-radius: 20px; }
+    .shape.circle { border-radius: 50%; }
+    .shape:nth-child(1) { width: 300px; height: 300px; top: -50px; left: -50px; animation-duration: 25s; }
+    .shape:nth-child(2) { width: 400px; height: 400px; bottom: -100px; right: -100px; animation-duration: 35s; animation-delay: -5s; }
+    .shape:nth-child(3) { width: 200px; height: 200px; top: 40%; left: 10%; animation-duration: 20s; animation-delay: -10s; background: rgba(0, 229, 255, 0.05); }
+    .shape:nth-child(4) { width: 250px; height: 250px; top: 15%; right: 15%; animation-duration: 30s; animation-delay: -15s; }
+    .shape:nth-child(5) { width: 150px; height: 150px; bottom: 10%; left: 20%; animation-duration: 18s; animation-delay: -2s; }
+    .shape:nth-child(6) { width: 350px; height: 350px; top: 50%; left: 50%; margin-top: -175px; margin-left: -175px; animation-duration: 40s; animation-delay: -20s; background: rgba(162, 155, 254, 0.05); }
+
+    @keyframes floatAndSpin {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+      50% { transform: translate(30px, -50px) rotate(180deg) scale(1.05); }
+      100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+    }
+
+    /* হেডার (শুধু মেনু থাকবে, কোনো বড় লেখা নেই) */
+    .top-header {
+      background: rgba(10, 26, 60, 0.4); 
+      backdrop-filter: blur(16px) saturate(150%); 
+      -webkit-backdrop-filter: blur(16px) saturate(150%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      color: #ffffff;
+      padding: 15px 20px; /* প্যাডিং কমানো হয়েছে */
+      width: 100%;
+      display: flex;
+      justify-content: center; /* মেনু মাঝখানে রাখার জন্য */
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-right { display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; }
+    .header-right a {
+      color: #dbe6ff;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 600;
+      transition: 0.3s;
+      position: relative;
+      padding-bottom: 5px;
+      cursor: pointer;
+    }
+    .header-right a:hover, .header-right a.active { color: #ffffff; text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
+    .header-right a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: #ffffff;
+      border-radius: 2px;
+    }
+
+    .main-wrapper { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 40px 20px; z-index: 10; position: relative; }
+    .page-content { display: none; }
+    .page-content.active-page { display: block; animation: fadeIn 0.4s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* পেজ টাইটেল */
+    .page-title {
+      font-size: 26px;
+      color: #ffffff;
+      border-left: 5px solid #4da3ff;
+      padding-left: 15px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      text-shadow: 0 0 15px rgba(77, 163, 255, 0.6);
+    }
+
+    /* ================= হোমপেজের ৭০/৩০ লেআউট ================= */
+    .home-hero-layout {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      margin-bottom: 50px;
+      min-height: 300px;
+    }
+
+    /* বাম দিক (৭০%) */
+    .hero-left {
+      flex: 0 0 70%;
+      max-width: 70%;
+    }
+
+                .hero-title {
+      font-size: 128px; /* আগের ৬৪px এর দ্বিগুণ */
+      font-weight: 700;
+      line-height: 1.1;
+      color: #ffffff;
+      text-shadow: 0 0 30px rgba(77, 163, 255, 0.8);
+      margin-bottom: 25px;
+      white-space: nowrap; /* লেখা এক লাইনে রাখার জন্য */
+      
+      /* বাম থেকে ডানে নীল গ্রেডিয়েন্ট অ্যানিমেশন */
+      background: linear-gradient(90deg, #ffffff, #4da3ff, #ffffff, #4da3ff);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientMove 3s linear infinite;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+        .hero-slogan-bn {
+      font-size: 36px; /* ৫২px থেকে কমিয়ে ৩৬px করা হলো */
+      font-weight: 500;
+      color: #dbe6ff;
+      line-height: 1.3;
+      margin-bottom: 15px;
+      border-left: 6px solid #4da3ff;
+      padding-left: 20px;
+    }
+
+    .hero-slogan-en {
+      font-size: 24px; /* ৩৬px থেকে কমিয়ে ২৪px করা হলো */
+      font-weight: 600;
+      color: #00e5ff;
+      letter-spacing: 1.5px;
+      line-height: 1.3;
+      border-left: 6px solid #00e5ff;
+      padding-left: 20px;
+      text-transform: uppercase;
+    }
+
+         /* নতুন যোগ করা TOTHAGOTO ORG স্টাইল */
+    .hero-brand-en {
+      font-size: 90px; /* ১০০px থেকে কমিয়ে ৯০px করা হলো যাতে এক লাইনে ফিট হয় */
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 15px;
+      font-family: 'Noto Sans Bengali', sans-serif;
+      
+      /* লেখা যাতে ভেঙে না যায়, এক লাইনেই থাকে */
+      white-space: nowrap; 
+      
+      /* ইংলিশ স্লোগানের কালার (#00e5ff) এবং সাদা রঙের গ্রেডিয়েন্ট */
+      background: linear-gradient(90deg, #ffffff, #00e5ff, #ffffff, #00e5ff);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientMove 3s linear infinite;
+    }
+	
+    /* মোবাইলের জন্য রেসপন্সিভ (লেখা যাতে বেরিয়ে না যায়) */
+    @media (max-width: 768px) {
+      .hero-title { font-size: 50px; white-space: normal; text-align: center; }
+      .hero-slogan-bn { font-size: 24px; text-align: center; border-left: none; border-top: 4px solid #4da3ff; padding-left: 0; padding-top: 15px; }
+      .hero-slogan-en { font-size: 20px; text-align: center; border-left: none; border-top: 4px solid #00e5ff; padding-left: 0; padding-top: 15px; }
+    }
+
+    /* ডান দিক (৩০%) - মেনু কার্ড গ্রিড */
+    .hero-right-menu {
+      flex: 0 0 30%;
+      max-width: 30%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .home-menu-card {
+      background: rgba(18, 38, 84, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(77, 163, 255, 0.2);
+      border-radius: 12px;
+      padding: 20px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .home-menu-card:hover {
+      transform: translateY(-5px);
+      border-color: #4da3ff;
+      background: rgba(77, 163, 255, 0.15);
+      box-shadow: 0 10px 25px rgba(77, 163, 255, 0.3);
+    }
+
+    .menu-icon { font-size: 30px; }
+    .menu-text { font-size: 15px; font-weight: 600; color: #ffffff; }
+
+    /* Contact কার্ডটি নিচে মাঝখানে বসানোর জন্য */
+    .home-menu-card.contact-card {
+      grid-column: span 2;
+      width: 50%;
+      justify-self: center;
+    }
+
+    @media (max-width: 768px) {
+      .home-hero-layout { flex-direction: column; gap: 30px; }
+      .hero-left, .hero-right-menu { flex: 0 0 100%; max-width: 100%; }
+      .hero-title { font-size: 42px; text-align: center; }
+      .hero-slogan {
+        font-size: 18px; text-align: center;
+        border-left: none; border-top: 3px solid #4da3ff;
+        padding-left: 0; padding-top: 15px;
+      }
+      .hero-right-menu { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* পোস্ট গ্রিড এবং কার্ড (গ্লাস ইফেক্ট) */
+    .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .post-card { 
+      background: rgba(18, 38, 84, 0.7); 
+      backdrop-filter: blur(10px);
+      border-radius: 12px; 
+      overflow: hidden; 
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); 
+      transition: transform 0.3s ease, border-color 0.3s ease; 
+      display: flex; 
+      flex-direction: column; 
+      border: 1px solid rgba(77, 163, 255, 0.2); 
+    }
+    .post-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(77, 163, 255, 0.3); border-color: rgba(77, 163, 255, 0.6); }
+    .post-image { width: 100%; height: 160px; object-fit: cover; background-color: #0a1a3c; }
+    .post-content { padding: 15px; display: flex; flex-direction: column; flex: 1; }
+    .post-date { font-size: 12px; color: #00e5ff; font-weight: 600; margin-bottom: 10px; }
+    .post-headline { font-size: 18px; font-weight: 700; color: #ffffff; line-height: 1.4; margin-bottom: 10px; }
+    .post-excerpt { font-size: 14px; color: #b0c4de; line-height: 1.6; flex: 1; }
+
+    /* সার্ভিস এবং অন্যান্য পেজ (গ্লাস ইফেক্ট) */
+    .services-section, .reg-form, .action-box, .verify-box, .success-box { 
+      background: rgba(18, 38, 84, 0.7); 
+      backdrop-filter: blur(10px);
+      border-radius: 12px; 
+      border: 1px solid rgba(77, 163, 255, 0.2); 
+      padding: 30px; 
+      margin-bottom: 30px;
+    }
+
+    /* Verify Box er Title & Input Style */
+    .verify-box h3 { font-size: 20px; color: #fff; margin-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 10px; text-align: left; }
+    .verify-box input { width: 100%; padding: 12px 15px; border: 1px solid rgba(77, 163, 255, 0.3); border-radius: 8px; font-size: 15px; background: rgba(0, 0, 0, 0.2); color: #fff; font-family: 'Noto Sans Bengali', sans-serif; margin-bottom: 15px; display: block; }
+    .verify-box input:focus { outline: none; border-color: #4da3ff; box-shadow: 0 0 10px rgba(77, 163, 255, 0.3); }
+    .verify-box input::placeholder { color: #b0c4de; }
+
+    /* টেবিলের জন্য আলাদা কন্টেইনার (স্ক্রলবার সহ) */
+    .notice-table-container, .post-table-container, .membership-table-container { 
+      background: rgba(18, 38, 84, 0.7); backdrop-filter: blur(10px);
+      border-radius: 12px; border: 1px solid rgba(77, 163, 255, 0.2); padding: 20px; margin-bottom: 30px;
+      max-height: 400px; overflow-y: auto;
+    }
+    .notice-table-container::-webkit-scrollbar, .post-table-container::-webkit-scrollbar, .membership-table-container::-webkit-scrollbar { width: 8px; }
+    .notice-table-container::-webkit-scrollbar-track, .post-table-container::-webkit-scrollbar-track, .membership-table-container::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+    .notice-table-container::-webkit-scrollbar-thumb, .post-table-container::-webkit-scrollbar-thumb, .membership-table-container::-webkit-scrollbar-thumb { background: #4da3ff; border-radius: 10px; }
+    .notice-table-container::-webkit-scrollbar-thumb:hover, .post-table-container::-webkit-scrollbar-thumb:hover, .membership-table-container::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+    .services-section h3 { font-size: 20px; color: #fff; margin-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+    
+    .involve-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .member-sub-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px; }
+
+    .involve-card, .member-sub-card, .admin-role-card, .admin-dashboard-card, .office-admin-card { 
+      background: rgba(255, 255, 255, 0.05); padding: 30px 20px; border-radius: 12px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); text-decoration: none; color: #fff; transition: 0.3s; cursor: pointer; 
+    }
+    .involve-card:hover, .member-sub-card:hover, .admin-role-card:hover, .admin-dashboard-card:hover, .office-admin-card:hover { 
+      transform: translateY(-5px); border-color: #4da3ff; background: rgba(77, 163, 255, 0.1);
+    }
+    .involve-icon, .icon { font-size: 40px; margin-bottom: 15px; display: block; }
+    .involve-title, .title { font-size: 18px; font-weight: 700; color: #fff; }
+    .involve-desc, .desc { font-size: 13px; color: #b0c4de; margin-top: 8px; }
+
+    /* ফর্ম এবং ইনপুট */
+    .reg-header h2 { font-size: 36px; color: #4da3ff; font-weight: 700; margin: 0; text-shadow: 0 0 15px rgba(77, 163, 255, 0.6); }
+    .reg-subtitle { font-size: 16px; color: #b0c4de; margin-bottom: 30px; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #dbe6ff; font-size: 15px; }
+    .form-group label .required { color: #ff4d4d; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 15px; border: 1px solid rgba(77, 163, 255, 0.3); border-radius: 8px; font-size: 15px; background: rgba(0, 0, 0, 0.2); color: #fff; font-family: 'Noto Sans Bengali', sans-serif; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #4da3ff; box-shadow: 0 0 10px rgba(77, 163, 255, 0.3); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-submit-btn, .verify-btn, .add-btn { background: linear-gradient(90deg, #0a1a3c, #4da3ff); color: white; padding: 15px; border: none; border-radius: 10px; font-size: 18px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.3s; }
+    .form-submit-btn:hover, .verify-btn:hover, .add-btn:hover { box-shadow: 0 0 20px rgba(77, 163, 255, 0.6); }
+    
+    .section-box { background: rgba(77, 163, 255, 0.1); color: #4da3ff; padding: 12px 20px; border-radius: 8px; font-size: 18px; font-weight: 700; margin-top: 30px; margin-bottom: 20px; border-left: 4px solid #4da3ff; }
+    
+	      /* ================= নতুন রেজিস্ট্রেশন ফর্ম লেআউট ================= */
+    .reg-layout-wrapper {
+      display: flex;
+      gap: 30px;
+      align-items: stretch; /* ফর্ম এবং ছবির বক্স সমান উচ্চতা ধরে রাখবে */
+      margin-bottom: 20px;
+      flex-direction: row;
+    }
+
+    /* ডান দিকের ছবির বক্স */
+    .reg-image-section {
+      flex: 0 0 35%;
+      max-width: 35%;
+      order: 2;
+      display: flex;
+      flex-direction: column; /* লেবেল এবং বক্সকে ওপর-নিচে রাখার জন্য */
+    }
+
+    /* ছবির বক্সটি ইমেইল ফিল্ডের শেষ পর্যন্ত টানবে */
+    .reg-image-box {
+      width: 100%;
+      flex: 1; /* ফর্মের উচ্চতা অনুযায়ী বাড়বে */
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px dashed rgba(77, 163, 255, 0.5);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      min-height: 250px; /* ছোট স্ক্রিনে যাতে একদম চেপে না যায় */
+    }
+
+    .reg-image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+
+    .reg-image-box .placeholder-text {
+      color: #b0c4de;
+      font-size: 14px;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* বাম দিকের ফর্ম ফিল্ড */
+    .reg-form-section {
+      flex: 1;
+      order: 1;
+    }
+
+    /* ঠিকানার ৪ কলামের গ্রিড */
+    .address-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    /* গ্রিডের হেডার (টাইটেল) */
+    .address-grid-header {
+      background: rgba(77, 163, 255, 0.1);
+      color: #4da3ff;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-align: center;
+      border: 1px solid rgba(77, 163, 255, 0.3);
+      margin-bottom: 10px;
+    }
+
+    .grid-header-present { grid-column: 1 / 3; }
+    .grid-header-permanent { grid-column: 3 / 5; }
+
+    /* ঠিকানার লেবেল এবং ইনপুট */
+    .address-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .address-item label {
+      font-size: 13px;
+      color: #dbe6ff;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .address-item input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid rgba(77, 163, 255, 0.3);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.2);
+      color: #fff;
+      font-family: 'Noto Sans Bengali', sans-serif;
+      height: auto; /* উচ্চতা অটো */
+    }
+    
+    .address-item input:focus {
+      outline: none;
+      border-color: #4da3ff;
+      box-shadow: 0 0 10px rgba(77, 163, 255, 0.3);
+    }
+
+    /* মোবাইল রেসপন্সিভ */
+    @media (max-width: 768px) {
+      .reg-layout-wrapper {
+        flex-direction: column;
+      }
+      .reg-image-section {
+        flex: 0 0 100%;
+        max-width: 100%;
+        order: 1; /* মোবাইলে ছবি উপরে বা নিচে যেকোনো এক জায়গায় থাকবে */
+      }
+      .reg-form-section {
+        order: 2;
+      }
+      .address-grid {
+        grid-template-columns: 1fr;
+      }
+      .grid-header-present, .grid-header-permanent {
+        grid-column: 1 / -1;
+      }
+    }
+
+    /* মোবাইল রেসপন্সিভ */
+    @media (max-width: 768px) {
+      .reg-layout-wrapper {
+        flex-direction: column;
+      }
+      .reg-image-section {
+        flex: 0 0 100%;
+        max-width: 100%;
+        order: 1; /* মোবাইলে ছবি উপরে বা নিচে যেকোনো এক জায়গায় থাকবে */
+      }
+      .reg-form-section {
+        order: 2;
+      }
+      .address-grid {
+        grid-template-columns: 1fr;
+      }
+      .grid-header-present, .grid-header-permanent {
+        grid-column: 1 / -1;
+      }
+    }
+	
+    /* টেবিল */
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    thead { background: rgba(0, 0, 0, 0.4); border-bottom: 2px solid rgba(77, 163, 255, 0.3); position: sticky; top: 0; }
+    th { padding: 15px 20px; font-weight: 700; color: #fff; font-size: 15px; }
+    td { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 15px; color: #b0c4de; }
+    tbody tr:hover { background: rgba(255,255,255,0.05); }
+    
+    .membership-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+    .membership-stat-card { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center; }
+    .membership-stat-card .num { font-size: 28px; font-weight: 700; color: #4da3ff; margin-bottom: 5px; }
+
+    .site-footer { background: transparent; color: #b0c4de; text-align: center; padding: 25px; margin-top: 40px; font-size: 14px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 10; position: relative; }
+    .site-footer b { color: #4da3ff; }
+
+    /* সার্চ বক্স এবং ডেট রেঞ্জের ডিজাইন */
+    .title-action-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+    .filter-box { display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 15px; }
+    .search-box { position: relative; width: 300px; margin-right: auto; }
+    .search-box input { width: 100%; padding: 10px 15px 10px 40px; border: 1px solid rgba(77, 163, 255, 0.3); border-radius: 8px; font-size: 15px; font-family: 'Noto Sans Bengali', sans-serif; transition: all 0.3s; background: rgba(0, 0, 0, 0.2); color: #fff; }
+    .search-box input::placeholder { color: #b0c4de; }
+    .search-box input:focus, .date-box input:focus { outline: none; border-color: #4da3ff; box-shadow: 0 0 10px rgba(77, 163, 255, 0.3); background: rgba(0, 0, 0, 0.4); }
+    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #b0c4de; font-size: 16px; pointer-events: none; }
+    .date-box { display: flex; gap: 8px; align-items: center; font-size: 14px; color: #b0c4de; }
+    .date-box input { padding: 9px 12px; border: 1px solid rgba(77, 163, 255, 0.3); border-radius: 8px; font-family: 'Noto Sans Bengali', sans-serif; font-size: 14px; background: rgba(0, 0, 0, 0.2); color: #fff; transition: all 0.3s; }
+    .date-box input::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+
+    @media (max-width: 768px) {
+      .top-header { padding: 15px 20px; }
+      .header-right { gap: 15px; flex-wrap: wrap; }
+      .involve-grid, .member-sub-grid, .form-row, .admin-role-grid, .admin-dashboard-grid { grid-template-columns: 1fr; }
+      .shape:nth-child(4), .shape:nth-child(5), .shape:nth-child(6) { display: none; }
+      .filter-box { flex-direction: column; align-items: stretch; }
+      .search-box { width: 100%; margin-right: 0; }
+      .date-box { width: 100%; justify-content: space-between; }
+      .date-box input { width: 48%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== BACKGROUND FLOATING SHAPES ===== -->
+  <div class="bg-shapes">
+    <div class="shape rect"></div>
+    <div class="shape circle"></div>
+    <div class="shape rect"></div>
+    <div class="shape circle"></div>
+    <div class="shape rect"></div>
+    <div class="shape circle"></div>
+  </div>
+
+  <!-- হেডার (কোনো বড় লেখা নেই, শুধু মেনু) -->
+    <header class="top-header" id="mainHeader" style="display: none;">
+        <div class="header-right">
+      <a onclick="showPage('dashboard', this)">Home</a> <!-- হোমপেজের জন্য নতুন বাটন -->
+      <a onclick="showPage('post-dashboard', this)" class="active">Dashboard</a>
+      <a onclick="showPage('notice', this)">Notice</a>
+      <a onclick="showPage('services', this)">Services</a>
+      <a onclick="showPage('about', this)">About</a>
+      <a onclick="showPage('contact', this)">Contact</a>
+    </div>
+  </header>
+
+  <div class="main-wrapper">
+    
+    <!-- ================= HOMEPAGE (৭০/৩০ লেআউট) ================= -->
+    <div id="dashboard" class="page-content active-page">
+      
+      <div class="home-hero-layout">
+        <!-- বাম দিকের অংশ (৭০%) -->
+        <div class="hero-left">
+          <h2 class="hero-title">
+            তথাগত সংসদ
+          </h2>
+          <p class="hero-slogan-bn">
+            সব দায়িত্ব রাষ্ট্রের নয়<br>
+            কিছুটা আপনার আমার প্রত্যেকের
+          </p>
+          <h3 class="hero-brand-en">TOTHAGOTO ORG</h3>
+          <p class="hero-slogan-en">
+            CHANGE BEGINS WITH THE PEOPLE<br>
+            NOT JUST THE STATE
+          </p>
+        </div>
+
+        <!-- ডান দিকের অংশ (৩০%) - মেনু কার্ড -->
+        <div class="hero-right-menu">
+          <!-- Dashboard -->
+          <div class="home-menu-card" onclick="showPage('post-dashboard', this)">
+            <span class="menu-icon">🏠</span>
+            <span class="menu-text">Dashboard</span>
+          </div>
+
+          <!-- Notice -->
+          <div class="home-menu-card" onclick="showPage('notice', this)">
+            <span class="menu-icon">📢</span>
+            <span class="menu-text">Notice</span>
+          </div>
+
+          <!-- Services -->
+          <div class="home-menu-card" onclick="showPage('services', this)">
+            <span class="menu-icon">🤝</span>
+            <span class="menu-text">Services</span>
+          </div>
+
+          <!-- About -->
+          <div class="home-menu-card" onclick="showPage('about', this)">
+            <span class="menu-icon">ℹ️</span>
+            <span class="menu-text">About</span>
+          </div>
+
+          <!-- Contact (নিচে মাঝখানে) -->
+          <div class="home-menu-card contact-card" onclick="showPage('contact', this)">
+            <span class="menu-icon">📞</span>
+            <span class="menu-text">Contact</span>
+          </div>
+        </div>
+      </div>
+      <!-- হোমপেজে কোনো পোস্ট থাকবে না -->
+
+    </div>
+
+    <!-- ================= POST DASHBOARD (যেখানে পোস্টগুলো থাকবে) ================= -->
+    <div id="post-dashboard" class="page-content">
+      <h2 class="page-title">আমাদের পোস্টসমূহ</h2>
+      <div class="post-grid" id="homePostGrid"></div>
+    </div>
+
+    <!-- ================= NOTICE ================= -->
+    <div id="notice" class="page-content">
+      <div class="title-action-row">
+        <h2 class="page-title" style="margin-bottom: 0;">নোটিশ বোর্ড</h2>
+        <div class="filter-box">
+          <div class="search-box" style="margin-right: auto;">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="নোটিশ খুঁজুন..." onkeyup="filterNotices()">
+          </div>
+          <div class="date-box">
+            <input type="date" id="startDate" onchange="filterNotices()">
+            <span>থেকে</span>
+            <input type="date" id="endDate" onchange="filterNotices()">
+          </div>
+        </div>
+      </div>
+
+      <div class="notice-table-container" id="tableScrollArea">
+        <table id="noticeTable">
+          <thead>
+            <tr>
+              <th width="25%">তারিখ</th>
+              <th width="50%">শিরোনাম</th>
+              <th width="25%">পিডিএফ ফাইল</th>
+            </tr>
+          </thead>
+          <tbody id="noticeTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ================= SERVICES ================= -->
+    <div id="services" class="page-content">
+      <h2 class="page-title">আমাদের সার্ভিসসমূহ</h2>
+      <div class="services-section">
+        <h3>আপনি কোন সার্ভিসটি নিতে চান?</h3>
+        <div class="involve-grid">
+          <div class="involve-card card-member" onclick="showPage('member-sub', this)">
+            <span class="involve-icon">🤝</span>
+            <div class="involve-title">Member</div>
+            <div class="involve-desc" style="margin-bottom: 0;">সদস্য সংক্রান্ত সমস্ত কাজ এখানে ক্লিক করুন।</div>
+          </div>
+          <a href="javascript:void(0)" onclick="alert('Loan পেজটি পরবর্তী ধাপে তৈরি করা হবে।')" class="involve-card card-loan">
+            <span class="involve-icon">🏦</span>
+            <div class="involve-title">Loan</div>
+            <div class="involve-desc" style="margin-bottom: 0;">সংগঠন থেকে ঋণ নেওয়ার জন্য আবেদন করুন। (শীঘ্রই আসছে)</div>
+          </a>
+          <div class="involve-card card-donate" onclick="alert('Donate পেজটি পরবর্তী ধাপে তৈরি করা হবে।')">
+            <span class="involve-icon">🎁</span>
+            <div class="involve-title">Donate</div>
+            <div class="involve-desc" style="margin-bottom: 0;">আপনার সামর্থ্য অনুযায়ী দান করুন।</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= MEMBER SUB ================= -->
+    <div id="member-sub" class="page-content">
+      <h2 class="page-title">Member Services</h2>
+      <div class="services-section">
+        <h3>আপনি কী করতে চান?</h3>
+        <div class="member-sub-grid">
+          <div class="member-sub-card" onclick="showPage('registration-form', this)">
+            <span class="icon">📝</span>
+            <div class="title">Registration</div>
+            <div class="desc">নতুন সদস্য হিসেবে নিবন্ধন করুন</div>
+          </div>
+          <div class="member-sub-card" onclick="showPage('update-verify', this)">
+            <span class="icon">🔄</span>
+            <div class="title">Update</div>
+            <div class="desc">আপনার তথ্য আপডেট করুন</div>
+          </div>
+          <div class="member-sub-card" onclick="showPage('fund-verify', this)">
+            <span class="icon">💰</span>
+            <div class="title">Fund</div>
+            <div class="desc">আপনার ফান্ড জমা ও বাকি দেখুন</div>
+          </div>
+          <div class="member-sub-card" onclick="showPage('admin-panel', this)">
+            <span class="icon">🔐</span>
+            <div class="title">Admin Panel</div>
+            <div class="desc">অ্যাডমিন হিসেবে লগইন করুন</div>
+          </div>
+        </div>
+        <button onclick="showPage('services', null)" style="margin-top: 20px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+         <!-- ================= REGISTRATION ================= -->
+    <div id="registration-form" class="page-content">
+      <div class="reg-header">
+        <h2>তথাগত সংসদ</h2>
+      </div>
+      <div class="reg-subtitle">সঠিক তথ্য দিয়ে ফর্ম পূরণ করুন</div>
+      
+      <form class="reg-form" onsubmit="submitRegistration(event)">
+        
+        <div class="reg-layout-wrapper">
+          <!-- বাম দিক: ফর্ম ফিল্ড (Order 1) -->
+          <div class="reg-form-section">
+            <div class="form-group">
+              <label>নাম <span class="required">*</span></label>
+              <input type="text" id="regName" placeholder="আপনার পূর্ণ নাম লিখুন" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>পিতার নাম <span class="required">*</span></label>
+                <input type="text" id="regFatherName" placeholder="পিতার নাম" required>
+              </div>
+              <div class="form-group">
+                <label>মাতার নাম <span class="required">*</span></label>
+                <input type="text" id="regMotherName" placeholder="মাতার নাম" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>জন্ম তারিখ <span class="required">*</span></label>
+                <input type="date" id="regDOB" required>
+              </div>
+              <div class="form-group">
+                <label>রক্তের গ্রুপ <span class="required">*</span></label>
+                <select id="regBloodGroup" required>
+                  <option value="">-- সিলেক্ট করুন --</option>
+                  <option value="A+">A+</option>
+                  <option value="B+">B+</option>
+                  <option value="AB+">AB+</option>
+                  <option value="O+">O+</option>
+                  <option value="A-">A-</option>
+                  <option value="B-">B-</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O-">O-</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>NID এর ধরন <span class="required">*</span></label>
+                <select id="regNIDType" required>
+                  <option value="">-- সিলেক্ট করুন --</option>
+                  <option value="নিজ">নিজ</option>
+                  <option value="বাবা">বাবা</option>
+                  <option value="মা">মা</option>
+                  <option value="ভাই">ভাই</option>
+                  <option value="বোন">বোন</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>NID নম্বর <span class="required">*</span></label>
+                <input type="text" id="regNIDNumber" placeholder="NID নম্বর" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>মোবাইল নম্বর <span class="required">*</span></label>
+                <input type="tel" id="regContact" placeholder="01XXXXXXXXX" required>
+              </div>
+              <div class="form-group">
+                <label>ইমার্জেন্সি নম্বর <span class="required">*</span></label>
+                <input type="tel" id="regEmergencyContact" placeholder="01XXXXXXXXX" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>ইমেইল <span class="required">*</span></label>
+              <input type="email" id="regEmail" placeholder="your@email.com" required>
+            </div>
+          </div>
+
+          <!-- ডান দিক: ছবির বক্স (Order 2) -->
+          <div class="reg-image-section">
+            <label style="display:block; margin-bottom:8px; font-weight:600; color:#dbe6ff; font-size:15px;">ছবি <span class="required">*</span></label>
+            <div class="reg-image-box" onclick="document.getElementById('regImage').click()">
+              <img id="regImagePreview" src="" alt="Preview">
+              <span class="placeholder-text" id="regImagePlaceholder">📸 ছবি আপলোড করতে ক্লিক করুন</span>
+            </div>
+            <input type="file" id="regImage" accept="image/*" required style="display: none;" onchange="previewImage(this, 'regImagePreview', 'regImagePlaceholder')">
+          </div>
+        </div>
+
+        <!-- নিচে ৪ কলামের ঠিকানা টেবিল -->
+        <div class="section-box">ঠিকানা</div>
+        <div class="address-grid">
+          <!-- হেডার রো -->
+          <div class="address-grid-header grid-header-present">বর্তমান ঠিকানা</div>
+          <div class="address-grid-header grid-header-permanent">স্থায়ী ঠিকানা (NID অনুযায়ী)</div>
+
+          <!-- বাম দিক: বর্তমান ঠিকানা (কলাম ১ ও ২) -->
+          <div class="address-item">
+            <label>বাড়ি নম্বর ও নাম <span class="required">*</span></label>
+            <input type="text" id="regPresHouse" placeholder="বাড়ি নম্বর" required>
+          </div>
+          <div class="address-item">
+            <label>এলাকা / গ্রাম <span class="required">*</span></label>
+            <input type="text" id="regPresArea" placeholder="এলাকা" required>
+          </div>
+
+          <!-- ডান দিক: স্থায়ী ঠিকানা (কলাম ৩ ও ৪) -->
+          <div class="address-item">
+            <label>বাড়ি নম্বর ও নাম <span class="required">*</span></label>
+            <input type="text" id="regPermHouse" placeholder="বাড়ি নম্বর" required>
+          </div>
+          <div class="address-item">
+            <label>এলাকা / গ্রাম <span class="required">*</span></label>
+            <input type="text" id="regPermArea" placeholder="এলাকা" required>
+          </div>
+
+          <!-- পরবর্তী রো -->
+          <div class="address-item">
+            <label>পোস্ট অফিস কোড <span class="required">*</span></label>
+            <input type="text" id="regPresPO" placeholder="পোস্ট কোড" required>
+          </div>
+          <div class="address-item">
+            <label>থানা / উপজেলা <span class="required">*</span></label>
+            <input type="text" id="regPresPS" placeholder="থানা" required>
+          </div>
+          <div class="address-item">
+            <label>পোস্ট অফিস কোড <span class="required">*</span></label>
+            <input type="text" id="regPermPO" placeholder="পোস্ট কোড" required>
+          </div>
+          <div class="address-item">
+            <label>থানা / উপজেলা <span class="required">*</span></label>
+            <input type="text" id="regPermPS" placeholder="থানা" required>
+          </div>
+
+          <!-- শেষ রো -->
+          <div class="address-item" style="grid-column: 1 / 3;">
+            <label>জেলা <span class="required">*</span></label>
+            <input type="text" id="regPresDist" placeholder="জেলা" required>
+          </div>
+          <div class="address-item" style="grid-column: 3 / 5;">
+            <label>জেলা <span class="required">*</span></label>
+            <input type="text" id="regPermDist" placeholder="জেলা" required>
+          </div>
+        </div>
+
+        <button type="submit" class="form-submit-btn">✅ রেজিস্ট্রেশন করুন</button>
+      </form>
+      <button onclick="showPage('member-sub', null)" style="margin-top: 20px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+    </div>
+
+    <!-- ================= REGISTRATION SUCCESS ================= -->
+    <div id="registration-success" class="page-content">
+      <div class="success-box">
+        <h2>🎉 আপনার আবেদন গৃহীত হয়েছে</h2>
+        <label class="id-label">আপনার আইডি নম্বর:</label>
+        <div class="success-field-row">
+          <input type="text" class="readonly-id" id="generatedID" value="" readonly>
+          <button class="copy-icon-btn" onclick="copyField('generatedID', this)" title="Copy ID">📋</button>
+        </div>
+        <label class="id-label">আপনার পাসওয়ার্ড:</label>
+        <div class="success-field-row">
+          <input type="text" class="readonly-id" id="generatedPassword" value="" readonly>
+          <button class="copy-icon-btn" onclick="copyField('generatedPassword', this)" title="Copy Password">📋</button>
+        </div>
+        <p class="password-note">⚠️ এই আইডি ও পাসওয়ার্ড সংরক্ষণ করুন। পরবর্তীতে লগইনের জন্য প্রয়োজন হবে।</p>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('dashboard', document.querySelector('.header-right a:nth-child(1)'))" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">🏠 হোম পেজে ফিরে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= UPDATE VERIFY ================= -->
+    <div id="update-verify" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">সঠিক তথ্য দিয়ে হালনাগাদ করুন</div>
+      <div class="verify-box">
+        <h3>আপনার আইডি ও পাসওয়ার্ড দিন</h3>
+        <input type="text" id="updateID" placeholder="যেমন: GJB23102601" style="text-transform: uppercase;">
+        <input type="password" id="updatePassword" placeholder="আপনার পাসওয়ার্ড" style="text-transform: none; letter-spacing: normal;">
+        <button class="verify-btn" onclick="verifyUpdateID()">🔍 Verify</button>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('member-sub', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+        <!-- ================= UPDATE PREFILL ================= -->
+    <div id="update-prefill" class="page-content">
+      <div class="reg-header" style="margin-bottom: 5px;"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">যে সকল তথ্য পরিবর্তনযোগ্য সুধুমাত্র সেগুলো হালনাগাদ করুন</div>
+      
+      <form class="reg-form" onsubmit="submitUpdate(event)">
+        
+        <div class="reg-layout-wrapper">
+          <!-- বাম দিক: ফর্ম ফিল্ড (Order 1) -->
+          <div class="reg-form-section">
+            <div class="form-group">
+              <label>নাম</label>
+              <input type="text" id="updName" value="">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>পিতার নাম</label>
+                <input type="text" id="updFather" value="">
+              </div>
+              <div class="form-group">
+                <label>মাতার নাম</label>
+                <input type="text" id="updMother" value="">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>জন্ম তারিখ</label>
+                <input type="date" id="updDOB" value="">
+              </div>
+              <div class="form-group">
+                <label>রক্তের গ্রুপ</label>
+                <select id="updBlood">
+                  <option value="A+">A+</option><option value="B+">B+</option><option value="AB+">AB+</option><option value="O+">O+</option>
+                  <option value="A-">A-</option><option value="B-">B-</option><option value="AB-">AB-</option><option value="O-">O-</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>NID এর ধরন</label>
+                <select id="updNIDType">
+                  <option value="নিজ">নিজ</option><option value="বাবা">বাবা</option><option value="মা">মা</option><option value="ভাই">ভাই</option><option value="বোন">বোন</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>NID নম্বর</label>
+                <input type="text" id="updNIDNumber" value="">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>মোবাইল নম্বর</label>
+                <input type="tel" id="updContact" value="">
+              </div>
+              <div class="form-group">
+                <label>ইমার্জেন্সি নম্বর</label>
+                <input type="tel" id="updEmergency" value="">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>ইমেইল</label>
+              <input type="email" id="updEmail" value="">
+            </div>
+          </div>
+
+          <!-- ডান দিক: ছবির বক্স (Order 2) -->
+          <div class="reg-image-section">
+            <label style="display:block; margin-bottom:8px; font-weight:600; color:#dbe6ff; font-size:15px;">বর্তমান ছবি</label>
+            <div class="reg-image-box" onclick="document.getElementById('updImage').click()">
+              <img id="updImagePreview" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Preview" style="display:block;">
+              <span class="placeholder-text" id="updImagePlaceholder" style="display:none;">📸 ছবি পরিবর্তন করতে ক্লিক করুন</span>
+            </div>
+            <input type="file" id="updImage" accept="image/*" style="display: none;" onchange="previewImage(this, 'updImagePreview', 'updImagePlaceholder')">
+          </div>
+        </div>
+
+        <!-- নিচে ৪ কলামের ঠিকানা টেবিল -->
+        <div class="section-box">ঠিকানা</div>
+        <div class="address-grid">
+          <!-- হেডার রো -->
+          <div class="address-grid-header grid-header-present">বর্তমান ঠিকানা</div>
+          <div class="address-grid-header grid-header-permanent">স্থায়ী ঠিকানা (NID অনুযায়ী)</div>
+
+          <div class="address-item">
+            <label>বাড়ি নম্বর ও নাম</label>
+            <input type="text" id="updPresHouse" value="">
+          </div>
+          <div class="address-item">
+            <label>এলাকা / গ্রাম</label>
+            <input type="text" id="updPresArea" value="">
+          </div>
+          <div class="address-item">
+            <label>বাড়ি নম্বর ও নাম</label>
+            <input type="text" id="updPermHouse" value="">
+          </div>
+          <div class="address-item">
+            <label>এলাকা / গ্রাম</label>
+            <input type="text" id="updPermArea" value="">
+          </div>
+
+          <div class="address-item">
+            <label>পোস্ট অফিস কোড</label>
+            <input type="text" id="updPresPO" value="">
+          </div>
+          <div class="address-item">
+            <label>থানা / উপজেলা</label>
+            <input type="text" id="updPresPS" value="">
+          </div>
+          <div class="address-item">
+            <label>পোস্ট অফিস কোড</label>
+            <input type="text" id="updPermPO" value="">
+          </div>
+          <div class="address-item">
+            <label>থানা / উপজেলা</label>
+            <input type="text" id="updPermPS" value="">
+          </div>
+
+          <div class="address-item" style="grid-column: 1 / 3;">
+            <label>জেলা</label>
+            <input type="text" id="updPresDist" value="">
+          </div>
+          <div class="address-item" style="grid-column: 3 / 5;">
+            <label>জেলা</label>
+            <input type="text" id="updPermDist" value="">
+          </div>
+        </div>
+
+        <button type="submit" class="form-submit-btn" id="updSubmitBtn">🔄 হালনাগাদ করুন</button>
+      </form>
+      
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="showPage('update-verify', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= UPDATE SUCCESS ================= -->
+    <div id="update-success" class="page-content">
+      <div class="success-box">
+        <h2>🎉 আপনার তথ্য হালনাগাদ করা হয়েছে</h2>
+        <label class="id-label">আপনার আইডি নম্বর:</label>
+        <div class="success-field-row">
+          <input type="text" class="readonly-id" id="updatedID" value="" readonly>
+          <button class="copy-icon-btn" onclick="copyField('updatedID', this)" title="Copy ID">📋</button>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('dashboard', document.querySelector('.header-right a:nth-child(1)'))" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">🏠 হোম পেজে ফিরে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= FUND VERIFY ================= -->
+    <div id="fund-verify" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">আপনার ফান্ড তথ্য দেখতে আইডি ও পাসওয়ার্ড দিন</div>
+      <div class="verify-box">
+        <h3>আপনার আইডি ও পাসওয়ার্ড দিন</h3>
+        <input type="text" id="fundID" placeholder="যেমন: GJB23102601" style="text-transform: uppercase;">
+        <input type="password" id="fundPassword" placeholder="আপনার পাসওয়ার্ড" style="text-transform: none; letter-spacing: normal;">
+        <button class="verify-btn" onclick="verifyFundID()">🔍 Verify</button>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('member-sub', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= FUND OTP ================= -->
+    <div id="fund-otp" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">ইমেইলে পাঠানো OTP কোড দিন</div>
+      <div class="verify-box">
+        <h3>OTP যাচাইকরণ</h3>
+        <p style="font-size:14px; color:#b0c4de; margin-bottom:15px;">
+          আপনার নিবন্ধিত ইমেইলে ৬ ডিজিটের OTP পাঠানো হয়েছে।<br>
+          <span style="color:#ff4d4d; font-weight:600;">মেয়াদ: ৬০ সেকেন্ড</span>
+        </p>
+        <input type="text" id="fundOTP" placeholder="● ● ● ● ● ●" maxlength="6" class="otp-input" inputmode="numeric" autocomplete="one-time-code">
+        <p id="fundOtpTimer" class="otp-timer">⏱️ অবশিষ্ট সময়: ৬০ সেকেন্ড</p>
+        <button class="verify-btn" onclick="verifyFundOTP()">✅ যাচাই করুন</button>
+        <button class="resend-btn" onclick="resendFundOTP()">🔄 OTP পুনরায় পাঠান</button>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('fund-verify', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= FUND PAYMENT ================= -->
+    <div id="fund-payment" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="fund-payment-section">
+        <div class="reg-subtitle">আপনার ফান্ড পেমেন্ট করুন</div>
+        <form onsubmit="event.preventDefault(); alert('✅ আপনার ফান্ড পেমেন্ট রিকোয়েস্ট পাঠানো হয়েছে!');">
+          <div class="form-group">
+            <label>বকেয়া টাকা (Due Amount)</label>
+            <input type="text" class="readonly-due" id="fundDueAmount" value="১৫০ টাকা" readonly>
+          </div>
+          <div class="form-group">
+            <label>পেমেন্ট মেথড <span class="required">*</span></label>
+            <select id="fundPaymentMethod" onchange="showFundPaymentInfo()" required>
+              <option value="">-- সিলেক্ট করুন --</option>
+              <option value="Bkash">Bkash</option>
+              <option value="Nagad">Nagad</option>
+              <option value="Bank">Bank Account</option>
+            </select>
+          </div>
+          <div class="payment-info-box" id="fundInfoBkash"><strong>Bkash নাম্বার:</strong> 01883570300</div>
+          <div class="payment-info-box" id="fundInfoNagad"><strong>Nagad নাম্বার:</strong> 01883570300</div>
+          <div class="payment-info-box" id="fundInfoBank">
+            <strong>Bank Name:</strong> City Bank<br>
+            <strong>Account Name:</strong> GEORGE JAGROTA BARUA<br>
+            <strong>Account Number:</strong> 2304132278001<br>
+            <strong>Branch District:</strong> CHATTOGRAM<br>
+            <strong>Branch Name:</strong> O.R. NIZAM ROAD BRANCH (CHATTOGRAM)<br>
+            <strong>Routing Number:</strong> 225155806
+          </div>
+          <div class="form-group">
+            <label>টাকার পরিমাণ (Amount) <span class="required">*</span></label>
+            <input type="number" id="fundAmount" placeholder="যেমন: ২০০" required>
+          </div>
+          <div class="form-group">
+            <label>যে নাম্বার/অ্যাকাউন্ট থেকে পাঠিয়েছেন <span class="required">*</span></label>
+            <input type="text" id="fundSender" placeholder="যেমন: 017XXXXXXXX বা Account Number" required>
+          </div>
+          <div class="form-group">
+            <label>পেমেন্টের স্ক্রিনশট / অ্যাটাচমেন্ট <span class="required">*</span></label>
+            <input type="file" accept="image/*" required style="padding: 10px;">
+          </div>
+          <button type="submit" class="form-submit-btn">✅ সাবমিট করুন</button>
+        </form>
+        <div style="text-align: center; margin-top: 20px;">
+          <button onclick="showPage('fund-verify', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= ADMIN PANEL ================= -->
+    <div id="admin-panel" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">আপনার অ্যাডমিন আইডি ও পাসওয়ার্ড দিন</div>
+      <div class="verify-box">
+        <h3>অ্যাডমিন লগইন</h3>
+        <input type="text" id="adminLoginID" placeholder="অ্যাডমিন আইডি" style="text-transform: uppercase;">
+        <input type="password" id="adminPassword" placeholder="পাসওয়ার্ড" style="text-transform: none; letter-spacing: normal;">
+        <button class="verify-btn" onclick="verifyAdminLogin()">🔍 Verify</button>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('member-sub', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= ADMIN OTP ================= -->
+    <div id="admin-otp" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">ইমেইলে পাঠানো OTP কোড দিন</div>
+      <div class="verify-box">
+        <h3>অ্যাডমিন OTP যাচাইকরণ</h3>
+        <p style="font-size:14px; color:#b0c4de; margin-bottom:15px;">
+          আপনার নিবন্ধিত ইমেইলে ৬ ডিজিটের OTP পাঠানো হয়েছে।<br>
+          <span style="color:#ff4d4d; font-weight:600;">মেয়াদ: ৬০ সেকেন্ড</span>
+        </p>
+        <input type="text" id="adminOTP" placeholder="● ● ● ● ● ●" maxlength="6" class="otp-input" inputmode="numeric" autocomplete="one-time-code">
+        <p id="adminOtpTimer" class="otp-timer">⏱️ অবশিষ্ট সময়: ৬০ সেকেন্ড</p>
+        <button class="verify-btn" onclick="verifyAdminOTP()">✅ যাচাই করুন</button>
+        <button class="resend-btn" onclick="resendAdminOTP()">🔄 OTP পুনরায় পাঠান</button>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('admin-panel', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= ADMIN ROLE ================= -->
+    <div id="admin-role" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">আপনি কোন রোল হিসেবে কাজ করতে চান?</div>
+      <div class="admin-role-grid">
+        <div class="admin-role-card" onclick="selectAdminRole('Main Admin')">
+          <span class="icon">👑</span><div class="title">Main Admin</div><div class="desc">প্রধান অ্যাডমিন</div>
+        </div>
+        <div class="admin-role-card" onclick="selectAdminRole('Accounts Admin')">
+          <span class="icon">💰</span><div class="title">Accounts Admin</div><div class="desc">হিসাবরক্ষণ অ্যাডমিন</div>
+        </div>
+        <div class="admin-role-card" onclick="selectAdminRole('Office Admin')">
+          <span class="icon">🏢</span><div class="title">Office Admin</div><div class="desc">অফিস অ্যাডমিন</div>
+        </div>
+        <div class="admin-role-card" onclick="selectAdminRole('IT Admin')">
+          <span class="icon">💻</span><div class="title">IT Admin</div><div class="desc">আইটি অ্যাডমিন</div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('admin-panel', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= MAIN ADMIN DASHBOARD ================= -->
+    <div id="main-admin-dashboard" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">মেইন অ্যাডমিন ড্যাশবোর্ড</div>
+      <div class="admin-dashboard-grid">
+        <div class="admin-dashboard-card" onclick="alert('Admin Activities পেজটি পরবর্তী ধাপে তৈরি করা হবে।')">
+          <span class="icon">📊</span><div class="title">Admin Activities</div><div class="desc">অ্যাডমিনদের কার্যক্রম দেখুন</div>
+        </div>
+        <div class="admin-dashboard-card" onclick="showPage('admin-control', null)">
+          <span class="icon">⚙️</span><div class="title">Admin Control</div><div class="desc">অ্যাডমিন যোগ/রিমুভ করুন</div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('admin-role', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= ADMIN CONTROL ================= -->
+    <div id="admin-control" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">অ্যাডমিন কন্ট্রোল</div>
+      <div class="admin-dashboard-grid three-col">
+        <div class="admin-dashboard-card" onclick="showPage('add-admin', null)">
+          <span class="icon">➕</span><div class="title">Add Admin</div><div class="desc">নতুন অ্যাডমিন যোগ করুন</div>
+        </div>
+        <div class="admin-dashboard-card" onclick="showPage('remove-admin', null)">
+          <span class="icon">➖</span><div class="title">Remove Admin</div><div class="desc">অ্যাডমিন রিমুভ করুন</div>
+        </div>
+        <div class="admin-dashboard-card" onclick="showPage('membership', null)">
+          <span class="icon">👥</span><div class="title">Membership</div><div class="desc">সদস্যদের তালিকা দেখুন</div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('admin-role', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= MEMBERSHIP ================= -->
+    <div id="membership" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">সদস্যদের তালিকা</div>
+      <div class="membership-stats">
+        <div class="membership-stat-card"><div class="num" id="totalMembers">০</div><div class="lbl">মোট সদস্য</div></div>
+        <div class="membership-stat-card"><div class="num" id="activeMembers">০</div><div class="lbl">সক্রিয় সদস্য</div></div>
+        <div class="membership-stat-card"><div class="num" id="inactiveMembers">০</div><div class="lbl">নিষ্ক্রিয় সদস্য</div></div>
+      </div>
+      <div class="membership-search-bar">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="memberSearchInput" placeholder="নাম বা আইডি দিয়ে খুঁজুন..." onkeyup="renderMembershipTable()">
+        </div>
+      </div>
+      <div class="membership-table-container">
+        <table id="membershipTable">
+          <thead>
+            <tr><th width="15%">আইডি</th><th width="30%">নাম</th><th width="20%">মোবাইল</th><th width="20%">পদবি / রোল</th><th width="15%">স্ট্যাটাস</th></tr>
+          </thead>
+          <tbody id="membershipTbody"></tbody>
+        </table>
+        <div id="membershipEmpty" class="membership-empty" style="display:none;">❌ কোনো সদস্য পাওয়া যায়নি।</div>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('admin-control', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= REMOVE MEMBER ACTION ================= -->
+    <div id="remove-member-action" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">সদস্য রিমুভ করুন</div>
+      <div class="action-box">
+        <div class="action-member-info">
+          <img id="removeMemberImg" src="" alt="Member">
+          <div>
+            <h3 id="removeMemberName">-</h3>
+            <p id="removeMemberID">-</p>
+            <p id="removeMemberRole">-</p>
+          </div>
+        </div>
+        <form onsubmit="event.preventDefault(); submitRemoveAction();">
+          <div class="form-group">
+            <label>রিমুভ করার কারণ (Remarks) <span class="required">*</span></label>
+            <input type="text" id="removeRemarksInput" placeholder="কারণ লিখুন..." required>
+          </div>
+          <button type="submit" class="form-submit-btn btn-remove-submit">➖ রিমুভ করুন</button>
+        </form>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('membership', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= RESTORE MEMBER ACTION ================= -->
+    <div id="restore-member-action" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">সদস্য রিস্টোর করুন</div>
+      <div class="action-box">
+        <div class="action-member-info">
+          <img id="restoreMemberImg" src="" alt="Member">
+          <div>
+            <h3 id="restoreMemberName">-</h3>
+            <p id="restoreMemberID">-</p>
+            <p id="restoreMemberRole">-</p>
+          </div>
+        </div>
+        <form onsubmit="event.preventDefault(); submitRestoreAction();">
+          <div class="form-group">
+            <label>রিস্টোর করার কারণ (Remarks) <span class="required">*</span></label>
+            <input type="text" id="restoreRemarksInput" placeholder="কারণ লিখুন..." required>
+          </div>
+          <button type="submit" class="form-submit-btn btn-restore-submit">🔄 রিস্টোর করুন</button>
+        </form>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('membership', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= ACTION SUCCESS ================= -->
+    <div id="action-success" class="page-content">
+      <div class="success-box">
+        <h2 id="successMessage">🎉 সফল হয়েছে</h2>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('membership', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ সদস্য তালিকায় ফিরে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= ADD ADMIN ================= -->
+    <div id="add-admin" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="add-admin-section">
+        <div class="reg-subtitle">নতুন অ্যাডমিন যোগ করুন</div>
+        <div id="addAdminVerifyBox" class="verify-box">
+          <h3>মেম্বার আইডি দিন</h3>
+          <input type="text" id="addAdminID" placeholder="যেমন: GJB23102601" style="text-transform: uppercase;">
+          <button class="verify-btn" onclick="verifyAdminMemberID()">🔍 Verify</button>
+        </div>
+        <div id="addAdminFormBox" style="display: none;">
+          <div class="prefill-img-box">
+            <img id="addAdminPrevImg" src="https://via.placeholder.com/130x150" alt="Member Image">
+          </div>
+          <div class="form-group"><label>নাম</label><input type="text" id="addAdminName" readonly></div>
+          <div class="form-group"><label>পদবি (Designation)</label><input type="text" id="addAdminDesignation" readonly></div>
+          <div class="form-group"><label>ইমেইল <span class="required">*</span></label><input type="email" id="addAdminEmail" placeholder="admin@example.com"></div>
+          <div class="form-group">
+            <label>অ্যাডমিন রোল <span class="required">*</span></label>
+            <select id="addAdminRole" required>
+              <option value="">-- সিলেক্ট করুন --</option>
+              <option value="Main Admin">Main Admin</option>
+              <option value="Accounts Admin">Accounts Admin</option>
+              <option value="Office Admin">Office Admin</option>
+              <option value="IT Admin">IT Admin</option>
+            </select>
+          </div>
+          <button type="button" class="add-btn" onclick="submitAddAdmin()">➕ অ্যাডমিন যোগ করুন</button>
+          <div class="status" id="addAdminStatus" style="text-align:center; margin-top:15px; font-weight:600;"></div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="showPage('admin-control', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= REMOVE ADMIN ================= -->
+    <div id="remove-admin" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="add-admin-section">
+        <div class="reg-subtitle">অ্যাডমিন রিমুভ করুন</div>
+        <div class="form-group">
+          <label>রোল সিলেক্ট করুন <span class="required">*</span></label>
+          <select id="removeAdminRoleSelect" onchange="loadAdminsForRemove()">
+            <option value="">-- রোল সিলেক্ট করুন --</option>
+            <option value="Main Admin">Main Admin</option>
+            <option value="Accounts Admin">Accounts Admin</option>
+            <option value="Office Admin">Office Admin</option>
+            <option value="IT Admin">IT Admin</option>
+          </select>
+        </div>
+        <div id="removeAdminList" style="margin-top: 10px;"></div>
+      </div>
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="showPage('admin-control', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= REMOVE ADMIN CONFIRM ================= -->
+    <div id="remove-admin-confirm" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="add-admin-section">
+        <div class="reg-subtitle">অ্যাডমিন অব্যাহতি ফর্ম</div>
+        <div id="removeAdminPreview" class="card-preview" style="display: none; background: rgba(255,255,255,0.1); border: 2px solid #e74c3c; border-radius: 12px; padding: 20px; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <img id="removeAdminPreviewImg" src="" style="width: 80px; height: 90px; border-radius: 8px; border: 2px solid #4da3ff; object-fit: cover;">
+          <div class="info">
+            <h4 id="removeAdminPreviewName" style="font-size: 18px; color: #fff; margin-bottom: 5px;"></h4>
+            <p id="removeAdminPreviewDesignation" style="font-size: 14px; color: #4da3ff; font-weight: 600; margin-bottom: 3px;"></p>
+            <p id="removeAdminPreviewID" style="font-size: 13px; color: #b0c4de; margin: 0;"></p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>অব্যাহতির কারণ <span class="required">*</span></label>
+          <input type="text" id="removeAdminReason" placeholder="কারণ লিখুন">
+        </div>
+        <button type="button" class="add-btn" style="background: linear-gradient(90deg, #e74c3c, #c0392b);" onclick="submitRemoveAdmin()">➖ রিমুভ করুন</button>
+        <div class="status" id="removeAdminStatus" style="text-align:center; margin-top:15px; font-weight:600;"></div>
+      </div>
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="showPage('remove-admin', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= OFFICE ADMIN DASHBOARD ================= -->
+    <div id="office-admin-dashboard" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">অফিস অ্যাডমিন ড্যাশবোর্ড</div>
+      <div class="office-admin-grid">
+        <div class="office-admin-card" onclick="showPage('create-post', null)">
+          <span class="icon">📝</span><div class="title">Create Post</div><div class="desc">নতুন পোস্ট তৈরি করুন</div>
+        </div>
+        <div class="office-admin-card" onclick="showPage('delete-post', null)">
+          <span class="icon">🗑️</span><div class="title">Delete Post</div><div class="desc">পোস্ট ডিলিট করুন</div>
+        </div>
+        <div class="office-admin-card" onclick="showPage('edit-post', null)">
+          <span class="icon">✏️</span><div class="title">Edit Post</div><div class="desc">পোস্ট এডিট করুন</div>
+        </div>
+        <div class="office-admin-card" onclick="showPage('create-notice', null)">
+          <span class="icon">📢</span><div class="title">Create Notice</div><div class="desc">নতুন নোটিশ তৈরি করুন</div>
+        </div>
+        <div class="office-admin-card" onclick="showPage('delete-notice', null)">
+          <span class="icon">🗑️</span><div class="title">Delete Notice</div><div class="desc">নোটিশ ডিলিট করুন</div>
+        </div>
+        <div class="office-admin-card" onclick="showPage('pending-notices', null)">
+          <span class="icon">⏳</span><div class="title">Pending Notices</div><div class="desc">সাইন করার অপেক্ষায় থাকা নোটিশ</div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showPage('admin-role', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= CREATE POST ================= -->
+    <div id="create-post" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">নতুন পোস্ট তৈরি করুন</div>
+      <form class="reg-form" id="createPostForm" onsubmit="submitCreatePost(event)">
+        <div class="form-group">
+          <label>তারিখ (স্বয়ংক্রিয়)</label>
+          <span class="auto-date-display" id="autoPostDate">—</span>
+          <span class="auto-date-note">পোস্ট তৈরির দিনের তারিখ স্বয়ংক্রিয়ভাবে সেট হবে</span>
+        </div>
+        <div class="form-group">
+          <label>শিরোনাম <span class="required">*</span></label>
+          <input type="text" id="createPostHeadline" placeholder="পোস্টের শিরোনাম লিখুন" required>
+        </div>
+        <div class="form-group">
+          <label>বিস্তারিত (Body) <span class="required">*</span></label>
+          <textarea id="createPostBody" placeholder="পোস্টের বিস্তারিত লিখুন..." required style="width:100%; padding:12px 15px; border:1px solid rgba(77,163,255,0.3); border-radius:8px; font-size:15px; font-family:'Noto Sans Bengali',sans-serif; background:rgba(0,0,0,0.2); color:#fff; min-height:150px; resize:vertical;"></textarea>
+        </div>
+        <div class="form-group">
+          <label>মিডিয়া (ছবি/PDF, একাধিক)</label>
+          <input type="file" id="createPostAttachments" accept="image/*,application/pdf" multiple style="padding: 10px;">
+        </div>
+        <button type="submit" class="form-submit-btn">✅ পোস্ট করুন</button>
+      </form>
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="showPage('office-admin-dashboard', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= DELETE POST ================= -->
+    <div id="delete-post" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">পোস্ট ডিলিট করুন</div>
+      <div class="post-table-container">
+        <table>
+          <thead><tr><th>সিরিয়াল</th><th>তারিখ</th><th>শিরোনাম</th><th>সিলেক্ট</th></tr></thead>
+          <tbody id="deletePostTbody"></tbody>
+        </table>
+      </div>
+      <button onclick="submitDeletePosts()" style="background: #e74c3c; color: white; padding: 12px 25px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px;">🗑️ ডিলিট করুন</button>
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="showPage('office-admin-dashboard', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= EDIT POST ================= -->
+    <div id="edit-post" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">পোস্ট এডিট করুন</div>
+      <div class="post-table-container">
+        <table>
+          <thead><tr><th>সিরিয়াল</th><th>তারিখ</th><th>শিরোনাম</th></tr></thead>
+          <tbody id="editPostTbody"></tbody>
+        </table>
+      </div>
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="showPage('office-admin-dashboard', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= EDIT POST FORM ================= -->
+    <div id="edit-post-form" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">পোস্ট এডিট করুন</div>
+      <form class="reg-form" id="editPostForm" onsubmit="submitEditPost(event)">
+        <input type="hidden" id="editPostNumber" value="">
+        <div class="form-group">
+          <label>তারিখ</label>
+          <span class="auto-date-display" id="editPostDate">—</span>
+          <span class="auto-date-note">পোস্ট তৈরির তারিখ পরিবর্তন করা যাবে না</span>
+        </div>
+        <div class="form-group"><label>শিরোনাম <span class="required">*</span></label><input type="text" id="editPostHeadline" required></div>
+        <div class="form-group">
+          <label>বিস্তারিত (Body) <span class="required">*</span></label>
+          <textarea id="editPostBody" required style="width:100%; padding:12px 15px; border:1px solid rgba(77,163,255,0.3); border-radius:8px; font-size:15px; font-family:'Noto Sans Bengali',sans-serif; background:rgba(0,0,0,0.2); color:#fff; min-height:150px; resize:vertical;"></textarea>
+        </div>
+        <div class="form-group">
+          <label>বর্তমান মিডিয়া</label>
+          <div id="editPostAttachments" class="attachment-grid"></div>
+        </div>
+        <div class="form-group">
+          <label>নতুন মিডিয়া যোগ করুন (ছবি/PDF)</label>
+          <input type="file" id="editPostNewAttachments" accept="image/*,application/pdf" multiple style="padding: 10px;">
+        </div>
+        <button type="submit" class="form-submit-btn">🔄 আপডেট করুন</button>
+      </form>
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="showPage('edit-post', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= CREATE NOTICE ================= -->
+    <div id="create-notice" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">নতুন নোটিশ তৈরি করুন</div>
+      <form class="reg-form" id="createNoticeForm" onsubmit="submitCreateNotice(event)">
+        <div class="form-group">
+          <label>তারিখ (স্বয়ংক্রিয়)</label>
+          <span class="auto-date-display" id="autoNoticeDate">—</span>
+          <span class="auto-date-note">নোটিশ তৈরির দিনের তারিখ স্বয়ংক্রিয়ভাবে সেট হবে</span>
+        </div>
+        <div class="form-group"><label>শিরোনাম <span class="required">*</span></label><input type="text" id="createNoticeTitle" placeholder="নোটিশের শিরোনাম লিখুন" required></div>
+        <div class="form-group">
+          <label>বিস্তারিত (Body) <span class="required">*</span></label>
+          <textarea id="createNoticeBody" required style="width:100%; padding:12px 15px; border:1px solid rgba(77,163,255,0.3); border-radius:8px; font-size:15px; font-family:'Noto Sans Bengali',sans-serif; background:rgba(0,0,0,0.2); color:#fff; min-height:150px; resize:vertical;" placeholder="নোটিশের বিস্তারিত লিখুন..."></textarea>
+        </div>
+        <button type="submit" class="form-submit-btn">✅ নোটিশ তৈরি করুন (Pending)</button>
+      </form>
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="showPage('office-admin-dashboard', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= PENDING NOTICES ================= -->
+    <div id="pending-notices" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">সাইন করার অপেক্ষায় থাকা নোটিশ</div>
+      <div class="post-table-container">
+        <table>
+          <thead><tr><th>সিরিয়াল</th><th>তারিখ</th><th>শিরোনাম</th><th>অ্যাকশন</th></tr></thead>
+          <tbody id="pendingNoticesTbody"></tbody>
+        </table>
+      </div>
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="showPage('office-admin-dashboard', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= UPLOAD SIGNED PDF ================= -->
+    <div id="upload-signed-notice" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">সাইন করা PDF আপলোড করুন</div>
+      <div class="reg-form">
+        <input type="hidden" id="uploadNoticeNumber" value="">
+        <div class="form-group"><label>নোটিশের শিরোনাম</label><input type="text" id="uploadNoticeTitle" readonly></div>
+        <div class="form-group"><label>Draft PDF (প্রিন্ট করুন)</label><div id="uploadDraftLink"></div></div>
+        <div class="form-group">
+          <label>সাইন করা PDF আপলোড করুন <span class="required">*</span></label>
+          <input type="file" id="signedPdfFile" accept="application/pdf" required style="padding: 10px;">
+        </div>
+        <button type="button" class="form-submit-btn" onclick="submitSignedNotice()">✅ আপলোড ও পাবলিশ করুন</button>
+      </div>
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="showPage('pending-notices', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= DELETE NOTICE ================= -->
+    <div id="delete-notice" class="page-content">
+      <div class="reg-header"><h2>তথাগত সংসদ</h2></div>
+      <div class="reg-subtitle">নোটিশ ডিলিট করুন</div>
+      <div class="notice-table-container">
+        <table>
+          <thead><tr><th>সিরিয়াল</th><th>তারিখ</th><th>শিরোনাম</th><th>সিলেক্ট</th></tr></thead>
+          <tbody id="deleteNoticeTbody"></tbody>
+        </table>
+      </div>
+      <button onclick="submitDeleteNotices()" style="background: #e74c3c; color: white; padding: 12px 25px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px;">🗑️ ডিলিট করুন</button>
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="showPage('office-admin-dashboard', null)" style="padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff;">⬅️ পেছনে যান</button>
+      </div>
+    </div>
+
+    <!-- ================= ABOUT ================= -->
+    <div id="about" class="page-content">
+      <h2 class="page-title">আমাদের সম্পর্কে (About Us)</h2>
+      <div class="about-section">
+        <h3>আমাদের পটভূমি</h3>
+        <p class="about-text" style="color: #b0c4de; line-height: 1.8;">
+          তথাগত সংসদ একটি অরাজনৈতিক, অলাভজনক বৌদ্ধধর্মীয় সামাজিক সংগঠন। আমাদের মূল লক্ষ্য হলো সমাজের সুবিধাবঞ্চিত মানুষের পাশে দাঁড়ানো এবং বৌদ্ধধর্মের আদর্শ সমাজে ছড়িয়ে দেওয়া। ২০১৯ সালে প্রতিষ্ঠিত হওয়ার পর থেকে আমরা বিভিন্ন সামাজিক ও মানবিক কার্যক্রম পরিচালনা করে আসছি।
+        </p>
+      </div>
+      <div class="about-section">
+        <h3>প্রতিষ্ঠাতা</h3>
+        <div class="member-grid">
+          <div class="member-card-about" style="background: rgba(255,255,255,0.05); padding:20px; border-radius:12px; text-align:center; border: 1px solid rgba(255,255,255,0.1);">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Founder" class="member-img" style="width:100px; height:100px; border-radius:50%; object-fit:cover; margin-bottom:15px; border:3px solid #4da3ff;">
+            <div class="member-name" style="font-size:17px; font-weight:700; color:#fff; margin-bottom:5px;">জর্জ জগরতা বারুয়া</div>
+            <div class="member-role" style="font-size:14px; color:#4da3ff; font-weight:600;">প্রতিষ্ঠাতা ও সভাপতি</div>
+          </div>
+          <div class="member-card-about" style="background: rgba(255,255,255,0.05); padding:20px; border-radius:12px; text-align:center; border: 1px solid rgba(255,255,255,0.1);">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Founder" class="member-img" style="width:100px; height:100px; border-radius:50%; object-fit:cover; margin-bottom:15px; border:3px solid #4da3ff;">
+            <div class="member-name" style="font-size:17px; font-weight:700; color:#fff; margin-bottom:5px;">অমিত বড়ুয়া</div>
+            <div class="member-role" style="font-size:14px; color:#4da3ff; font-weight:600;">সহ-প্রতিষ্ঠাতা</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-section">
+        <h3>অ্যাডমিন প্যানেল</h3>
+        <div class="member-grid">
+          <div class="member-card-about" style="background: rgba(255,255,255,0.05); padding:20px; border-radius:12px; text-align:center; border: 1px solid rgba(255,255,255,0.1);">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Admin" class="member-img" style="width:100px; height:100px; border-radius:50%; object-fit:cover; margin-bottom:15px; border:3px solid #4da3ff;">
+            <div class="member-name" style="font-size:17px; font-weight:700; color:#fff; margin-bottom:5px;">সুমন বড়ুয়া</div>
+            <div class="member-role" style="font-size:14px; color:#4da3ff; font-weight:600;">মেইন অ্যাডমিন</div>
+          </div>
+          <div class="member-card-about" style="background: rgba(255,255,255,0.05); padding:20px; border-radius:12px; text-align:center; border: 1px solid rgba(255,255,255,0.1);">
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Admin" class="member-img" style="width:100px; height:100px; border-radius:50%; object-fit:cover; margin-bottom:15px; border:3px solid #4da3ff;">
+            <div class="member-name" style="font-size:17px; font-weight:700; color:#fff; margin-bottom:5px;">রাহুল বড়ুয়া</div>
+            <div class="member-role" style="font-size:14px; color:#4da3ff; font-weight:600;">আইটি অ্যাডমিন</div>
+          </div>
+          <div class="member-card-about" style="background: rgba(255,255,255,0.05); padding:20px; border-radius:12px; text-align:center; border: 1px solid rgba(255,255,255,0.1);">
+            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Admin" class="member-img" style="width:100px; height:100px; border-radius:50%; object-fit:cover; margin-bottom:15px; border:3px solid #4da3ff;">
+            <div class="member-name" style="font-size:17px; font-weight:700; color:#fff; margin-bottom:5px;">প্রিয়াঙ্কা বড়ুয়া</div>
+            <div class="member-role" style="font-size:14px; color:#4da3ff; font-weight:600;">অ্যাকাউন্টস অ্যাডমিন</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= CONTACT ================= -->
+    <div id="contact" class="page-content">
+      <h2 class="page-title">যোগাযোগ (Contact Us)</h2>
+      <p style="margin-top: 20px; font-size: 16px; line-height: 1.8; color: #b0c4de;">
+        যোগাযোগের ঠিকানা:<br>
+        ইমেইল: <b style="color:#fff;">tothagatosongshod@gmail.com</b><br>
+        ফোন: <b style="color:#fff;">01883570300</b>
+      </p>
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    Developed with ❤️ by <b>Tothagoto Songshod IT Team</b>
+  </footer>
+
+  <script>
+    // ==========================================
+    // Supabase & Cloudinary Config
+    // ==========================================
+    const SUPABASE_URL = 'https://gifbpjjixfqdodiniaqk.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_XYUhgKQgen9iPiwgZbEtdg_CooU1q4x';
+    const CLOUDINARY_CLOUD_NAME = 'g6v9ah1w';
+    const CLOUDINARY_UPLOAD_PRESET = 'tothagoto_upload';
+
+    // ===================== DATA =====================
+    var membersData = [
+      { id: 'GJB23102601', name: 'জর্জ জগরতা বারুয়া', phone: '01883570300', designation: 'Main Admin', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: true },
+      { id: 'SB23102602', name: 'সুমন বড়ুয়া', phone: '01712345678', designation: 'IT Admin', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: true },
+      { id: 'PB23102603', name: 'প্রিয়াঙ্কা বড়ুয়া', phone: '01887654321', designation: 'Accounts Admin', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: true },
+      { id: 'AB23102604', name: 'অমিত বড়ুয়া', phone: '01799887766', designation: 'Member', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: true },
+      { id: 'RB23102605', name: 'রাহুল বড়ুয়া', phone: '01777665544', designation: 'Member', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: false },
+      { id: 'SD23102606', name: 'সুরজ বড়ুয়া', phone: '01511223344', designation: 'Member', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: true },
+      { id: 'KD23102607', name: 'কমল বড়ুয়া', phone: '01622334455', designation: 'Member', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: true },
+      { id: 'MD23102608', name: 'মিথুন বড়ুয়া', phone: '01733445566', designation: 'Member', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: false },
+      { id: 'RD23102609', name: 'রনি বড়ুয়া', phone: '01844556677', designation: 'Member', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: true },
+      { id: 'BD23102610', name: 'বাবু বড়ুয়া', phone: '01955667788', designation: 'Member', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: true },
+      { id: 'TD23102611', name: 'তপন বড়ুয়া', phone: '01366778899', designation: 'Member', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: true },
+      { id: 'UD23102612', name: 'উজ্জ্বল বড়ুয়া', phone: '01477889900', designation: 'Member', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: true },
+      { id: 'VD23102613', name: 'বিজয় বড়ুয়া', phone: '01588990011', designation: 'Member', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: false },
+      { id: 'WD23102614', name: 'সজল বড়ুয়া', phone: '01699001122', designation: 'Member', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: true },
+      { id: 'XD23102615', name: 'রতন বড়ুয়া', phone: '01700112233', designation: 'Member', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&q=80', active: true }
+    ];
+
+    var selectedMemberId = null;
+
+    // ===================== ROUTING =====================
+    
+function showPage(pageId, element, skipHistory) {
+      var header = document.getElementById("mainHeader");
+      if (pageId === 'dashboard') {
+        header.style.display = "none"; // হোমপেজে হেডার লুকানো থাকবে
+      } else {
+        header.style.display = "flex"; // অন্য পেজে হেডার দেখা যাবে
+      }
+	  var pages = document.getElementsByClassName("page-content");
+      for (var i = 0; i < pages.length; i++) pages[i].classList.remove("active-page");
+      var target = document.getElementById(pageId);
+      if (!target) { pageId = 'dashboard'; target = document.getElementById('dashboard'); }
+      target.classList.add("active-page");
+
+      var links = document.getElementsByClassName("header-right")[0].getElementsByTagName("a");
+      for (var i = 0; i < links.length; i++) links[i].classList.remove("active");
+      
+            var mainPages = ['dashboard', 'post-dashboard', 'notice', 'services', 'about', 'contact'];
+      if (mainPages.includes(pageId)) {
+        var navIdx = 0; 
+        if (pageId === 'dashboard') navIdx = 0; // Home
+        if (pageId === 'post-dashboard') navIdx = 1; // Dashboard (পোস্ট)
+        if (pageId === 'notice') navIdx = 2;
+        if (pageId === 'services') navIdx = 3;
+        if (pageId === 'about') navIdx = 4;
+        if (pageId === 'contact') navIdx = 5;
+        
+        if (links[navIdx]) links[navIdx].classList.add("active");
+      } else {
+        if (links[3]) links[3].classList.add("active"); // অন্যান্য পেজে Services একটিভ থাকবে
+      }
+
+      if (pageId === 'create-post') setAutoDate('autoPostDate');
+      if (pageId === 'create-notice') setAutoDate('autoNoticeDate');
+
+      if (pageId === 'membership') renderMembershipTable();
+      if (pageId === 'edit-post') loadPostsForEdit();
+      if (pageId === 'delete-post') loadPostsForDelete();
+      if (pageId === 'notice') loadNotices();
+      if (pageId === 'delete-notice') loadNoticesForDelete();
+      if (pageId === 'pending-notices') loadPendingNotices();
+      if (pageId === 'post-dashboard') loadHomePosts(); // পোস্ট লোড করার জন্য
+  
+      if (!skipHistory) window.location.hash = pageId;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.addEventListener('load', function() {
+      var initialPage = 'dashboard';
+      if (window.location.hash) {
+        var hash = window.location.hash.replace('#', '');
+        if (hash === 'home') hash = 'dashboard';
+        if (document.getElementById(hash)) initialPage = hash;
+      }
+      showPage(initialPage, null, true);
+      loadHomePosts(); // পোস্টগুলো ব্যাকগ্রাউন্ডে লোড হবে
+    });
+
+    // ===================== NEWS / HOME POSTS =====================
+    async function loadHomePosts() {
+      const grid = document.getElementById('homePostGrid');
+      if (!grid) return;
+
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/news?select=*&order=post_number.desc,timestamp.desc`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        const rows = await res.json();
+
+        const latestMap = {};
+        rows.forEach(r => {
+          if (!latestMap[r.post_number]) latestMap[r.post_number] = r;
+        });
+
+        const posts = Object.values(latestMap)
+          .filter(p => p.status !== 'deleted')
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        grid.innerHTML = '';
+
+        if (posts.length === 0) {
+          grid.innerHTML = '<p style="text-align:center; color:#b0c4de; grid-column:1/-1;">এখনো কোনো পোস্ট নেই।</p>';
+          return;
+        }
+
+        posts.forEach(post => {
+          const editedBadge = post.status === 'edited'
+            ? '<span class="edited-badge" style="background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius:10px; font-size:11px; margin-left:5px;">Edited</span>'
+            : '';
+
+          let firstImage = '';
+          if (Array.isArray(post.attachments)) {
+            const imgUrl = post.attachments.find(u => !u.toLowerCase().endsWith('.pdf'));
+            if (imgUrl) firstImage = imgUrl;
+          }
+
+          const imageHtml = firstImage ? `<img src="${firstImage}" alt="Post" class="post-image">` : '';
+
+          const card = document.createElement('div');
+          card.className = 'post-card';
+          card.style.cursor = 'pointer';
+          card.innerHTML = `
+            ${imageHtml}
+            <div class="post-content">
+              <div class="post-date">
+                <span>📅 ${formatBengaliDate(post.timestamp)}</span>
+                ${editedBadge}
+              </div>
+              <h3 class="post-headline">${escapeHtml(post.headline)}</h3>
+              <p class="post-excerpt">${escapeHtml(post.body.substring(0, 80))}${post.body.length > 80 ? '...' : ''}</p>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error('Home posts load failed:', err);
+        grid.innerHTML = '<p style="text-align:center; color:#e74c3c; grid-column:1/-1;">পোস্ট লোড করা যায়নি।</p>';
+      }
+    }
+
+    function formatBengaliDate(ts) {
+      const d = new Date(ts);
+      const months = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+      const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+      const toBn = n => String(n).split('').map(x => bn[x] || x).join('');
+      return toBn(d.getDate()) + ' ' + months[d.getMonth()] + ', ' + toBn(d.getFullYear());
+    }
+
+    function escapeHtml(s) {
+      if (!s) return '';
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ===================== AUTO DATE =====================
+    function setAutoDate(elementId) {
+      var el = document.getElementById(elementId);
+      if (!el) return;
+      var now = new Date();
+      var monthsBn = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+      var day = now.getDate();
+      var month = monthsBn[now.getMonth()];
+      var year = now.getFullYear();
+      function toBn(num) {
+        var bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+        return String(num).split('').map(function(d){ return bn[d] || d; }).join('');
+      }
+      el.textContent = toBn(day) + ' ' + month + ', ' + toBn(year);
+    }
+
+    function copyField(fieldId, btnElement) {
+      var input = document.getElementById(fieldId);
+      if (!input) return;
+      input.select();
+      input.setSelectionRange(0, 99999);
+      try {
+        var success = document.execCommand("copy");
+        if (success) {
+          var originalText = btnElement.innerHTML;
+          btnElement.innerHTML = "✅";
+          btnElement.classList.add("copied");
+          setTimeout(function() {
+            btnElement.innerHTML = originalText;
+            btnElement.classList.remove("copied");
+          }, 1500);
+        } else alert("❌ কপি করতে সমস্যা হয়েছে। ম্যানুয়ালি কপি করুন।");
+      } catch (err) {
+        alert("❌ কপি করতে সমস্যা হয়েছে। ম্যানুয়ালি কপি করুন।");
+      }
+    }
+
+    // ছবি প্রিভিউ করার ফাংশন
+    function previewImage(input, imgId, placeholderId) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var img = document.getElementById(imgId);
+          img.src = e.target.result;
+          img.style.display = 'block';
+          var placeholder = document.getElementById(placeholderId);
+          if (placeholder) placeholder.style.display = 'none';
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+	
+    // ==========================================
+    // REGISTRATION SUBMISSION
+    // ==========================================
+    async function submitRegistration(event) {
+      event.preventDefault();
+      
+      const btn = event.target.querySelector('.form-submit-btn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '⏳ সাবমিট হচ্ছে...';
+      btn.disabled = true;
+
+      try {
+        const fileInput = document.getElementById('regImage');
+        const file = fileInput.files[0];
+        if (!file) throw new Error('অনুগ্রহ করে একটি ছবি দিন।');
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+        const cloudRes = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+          method: 'POST',
+          body: formData
+        });
+        const cloudData = await cloudRes.json();
+        if (!cloudData.secure_url) throw new Error('ছবি আপলোড ব্যর্থ হয়েছে।');
+        const pictureUrl = cloudData.secure_url;
+
+        const maxSerialRes = await fetch(`${SUPABASE_URL}/rest/v1/members?select=serial&order=serial.desc&limit=1`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const maxSerialData = await maxSerialRes.json();
+        let newSerial = 1;
+        if (maxSerialData.length > 0 && maxSerialData[0].serial) {
+          newSerial = maxSerialData[0].serial + 1;
+        }
+
+        const name = document.getElementById('regName').value.trim();
+        const fatherName = document.getElementById('regFatherName').value.trim();
+        const motherName = document.getElementById('regMotherName').value.trim();
+        const dob = document.getElementById('regDOB').value;
+        const bloodGroup = document.getElementById('regBloodGroup').value;
+        const nidType = document.getElementById('regNIDType').value;
+        const nidNumber = document.getElementById('regNIDNumber').value.trim();
+        const contact = document.getElementById('regContact').value.trim();
+        const emergencyContact = document.getElementById('regEmergencyContact').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const presHouse = document.getElementById('regPresHouse').value.trim();
+        const presArea = document.getElementById('regPresArea').value.trim();
+        const presPO = document.getElementById('regPresPO').value.trim();
+        const presPS = document.getElementById('regPresPS').value.trim();
+        const presDist = document.getElementById('regPresDist').value.trim();
+        const permHouse = document.getElementById('regPermHouse').value.trim();
+        const permArea = document.getElementById('regPermArea').value.trim();
+        const permPO = document.getElementById('regPermPO').value.trim();
+        const permPS = document.getElementById('regPermPS').value.trim();
+        const permDist = document.getElementById('regPermDist').value.trim();
+
+        const nameParts = name.split(' ');
+        let initials = "";
+        if (nameParts.length >= 2) {
+          initials = (nameParts[0].charAt(0) + nameParts[1].charAt(0)).toUpperCase();
+        } else {
+          initials = nameParts[0].substring(0, 2).toUpperCase();
+        }
+
+        const now = new Date();
+        const dd = String(now.getDate()).padStart(2, '0');
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const yy = String(now.getFullYear()).substring(2);
+        const dateStr = dd + mm + yy;
+        const serialStr = String(newSerial).padStart(2, '0');
+        const generatedID = initials + dateStr + serialStr;
+
+        const memberData = {
+          serial: newSerial,
+          member_id: generatedID,
+          picture: pictureUrl,
+          name: name,
+          father_name: fatherName,
+          mother_name: motherName,
+          dob: dob,
+          nid_type: nidType,
+          nid_number: nidNumber,
+          blood_group: bloodGroup,
+          contact: contact,
+          emergency_contact: emergencyContact,
+          email: email,
+          pres_house: presHouse,
+          pres_area: presArea,
+          pres_po: presPO,
+          pres_ps: presPS,
+          pres_dist: presDist,
+          perm_house: permHouse,
+          perm_area: permArea,
+          perm_po: permPO,
+          perm_ps: permPS,
+          perm_dist: permDist,
+          folder_name: name
+        };
+
+        const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/members`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(memberData)
+        });
+
+        if (!dbRes.ok) {
+          const errText = await dbRes.text();
+          throw new Error('ডাটাবেসে সেভ করা যায়নি: ' + errText);
+        }
+
+        fetch('/.netlify/functions/generate-pdf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ memberData: memberData })
+        }).then(res => res.json()).then(pdfRes => {
+          if (pdfRes.status === 'success') {
+            const linkSource = 'data:application/pdf;base64,' + pdfRes.pdfBase64;
+            const downloadLink = document.createElement("a");
+            const fileName = memberData.member_id + "-00.pdf";
+            downloadLink.href = linkSource;
+            downloadLink.download = fileName;
+            downloadLink.click();
+          }
+        }).catch(err => console.error('PDF তৈরি করা যায়নি:', err));
+
+        document.getElementById('generatedID').value = generatedID;
+        document.getElementById('generatedPassword').value = "Tmp@" + Math.floor(1000 + Math.random() * 9000);
+        showPage('registration-success', null);
+        event.target.reset();
+
+      } catch (error) {
+        alert('❌ সমস্যা হয়েছে: ' + error.message);
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    // ==========================================
+    // UPDATE VERIFY
+    // ==========================================
+    async function verifyUpdateID() {
+      var idValue = document.getElementById('updateID').value.trim().toUpperCase();
+      var passValue = document.getElementById('updatePassword').value.trim();
+      
+      if (!idValue) { alert("❌ অনুগ্রহ করে আপনার আইডি নম্বর দিন।"); return; }
+      if (!passValue) { alert("❌ অনুগ্রহ করে আপনার পাসওয়ার্ড দিন।"); return; }
+
+      const btn = document.querySelector('#update-verify .verify-btn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '⏳ খোঁজা হচ্ছে...';
+      btn.disabled = true;
+
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/members?member_id=eq.${idValue}&select=*`, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        });
+        const data = await response.json();
+
+        if (data.length === 0) {
+          throw new Error('এই আইডিতে কোনো সদস্য পাওয়া যায়নি।');
+        }
+
+        const member = data[0];
+        
+        document.getElementById('updName').value = member.name || '';
+        document.getElementById('updFather').value = member.father_name || '';
+        document.getElementById('updMother').value = member.mother_name || '';
+        document.getElementById('updDOB').value = member.dob || '';
+        document.getElementById('updBlood').value = member.blood_group || 'A+';
+        document.getElementById('updNIDType').value = member.nid_type || 'নিজ';
+        document.getElementById('updNIDNumber').value = member.nid_number || '';
+        document.getElementById('updContact').value = member.contact || '';
+        document.getElementById('updEmergency').value = member.emergency_contact || '';
+        document.getElementById('updEmail').value = member.email || '';
+        document.getElementById('updPresHouse').value = member.pres_house || '';
+        document.getElementById('updPresArea').value = member.pres_area || '';
+        document.getElementById('updPresPO').value = member.pres_po || '';
+        document.getElementById('updPresPS').value = member.pres_ps || '';
+        document.getElementById('updPresDist').value = member.pres_dist || '';
+        document.getElementById('updPermHouse').value = member.perm_house || '';
+        document.getElementById('updPermArea').value = member.perm_area || '';
+        document.getElementById('updPermPO').value = member.perm_po || '';
+        document.getElementById('updPermPS').value = member.perm_ps || '';
+        document.getElementById('updPermDist').value = member.perm_dist || '';
+        
+        if(member.picture) {
+          document.getElementById('updImagePreview').src = member.picture;
+		  document.getElementById('updImagePreview').style.display = 'block';
+document.getElementById('updImagePlaceholder').style.display = 'none';
+        }
+
+        showPage('update-prefill', null);
+        alert("✅ সদস্য পাওয়া গেছে! এখন তথ্য আপডেট করুন।");
+
+      } catch (error) {
+        alert('❌ ' + error.message);
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    // ==========================================
+    // UPDATE SUBMISSION
+    // ==========================================
+    async function submitUpdate(event) {
+      event.preventDefault();
+      const btn = document.getElementById('updSubmitBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '⏳ আপডেট হচ্ছে...';
+      btn.disabled = true;
+
+      try {
+        const idValue = document.getElementById('updateID').value.trim().toUpperCase();
+        
+        const fileInput = document.getElementById('updImage');
+        const file = fileInput.files[0];
+        let newPictureUrl = null;
+
+        if (file) {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+          const cloudRes = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+            method: 'POST',
+            body: formData
+          });
+          const cloudData = await cloudRes.json();
+          if (cloudData.secure_url) {
+            newPictureUrl = cloudData.secure_url;
+          }
+        }
+
+        const updateData = {
+          name: document.getElementById('updName').value.trim(),
+          father_name: document.getElementById('updFather').value.trim(),
+          mother_name: document.getElementById('updMother').value.trim(),
+          dob: document.getElementById('updDOB').value,
+          blood_group: document.getElementById('updBlood').value,
+          nid_type: document.getElementById('updNIDType').value,
+          nid_number: document.getElementById('updNIDNumber').value.trim(),
+          contact: document.getElementById('updContact').value.trim(),
+          emergency_contact: document.getElementById('updEmergency').value.trim(),
+          email: document.getElementById('updEmail').value.trim(),
+          pres_house: document.getElementById('updPresHouse').value.trim(),
+          pres_area: document.getElementById('updPresArea').value.trim(),
+          pres_po: document.getElementById('updPresPO').value.trim(),
+          pres_ps: document.getElementById('updPresPS').value.trim(),
+          pres_dist: document.getElementById('updPresDist').value.trim(),
+          perm_house: document.getElementById('updPermHouse').value.trim(),
+          perm_area: document.getElementById('updPermArea').value.trim(),
+          perm_po: document.getElementById('updPermPO').value.trim(),
+          perm_ps: document.getElementById('updPermPS').value.trim(),
+          perm_dist: document.getElementById('updPermDist').value.trim()
+        };
+
+        if (newPictureUrl) updateData.picture = newPictureUrl;
+
+        const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/members?member_id=eq.${idValue}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(updateData)
+        });
+
+        if (!dbRes.ok) {
+          const errText = await dbRes.text();
+          throw new Error('আপডেট করা যায়নি: ' + errText);
+        }
+
+        document.getElementById('updatedID').value = idValue;
+        showPage('update-success', null);
+        event.target.reset();
+
+      } catch (error) {
+        alert('❌ সমস্যা হয়েছে: ' + error.message);
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    // ===================== FUND FLOW =====================
+    var fundOtpTimerInterval = null, currentFundOTP = "", currentFundOTPID = "", fundOtpExpiryTime = 0;
+
+    function verifyFundID() {
+      var idValue = document.getElementById('fundID').value.trim().toUpperCase();
+      var passValue = document.getElementById('fundPassword').value.trim();
+      if(!idValue) { alert("❌ অনুগ্রহ করে আপনার আইডি নম্বর দিন।"); return; }
+      if(!passValue) { alert("❌ অনুগ্রহ করে আপনার পাসওয়ার্ড দিন।"); return; }
+      sendFundOTP(idValue);
+    }
+
+    function sendFundOTP(memberID) {
+      currentFundOTPID = memberID;
+      currentFundOTP = Math.floor(100000 + Math.random() * 900000).toString();
+      fundOtpExpiryTime = Date.now() + 60000;
+      alert("📧 ডেমো Fund OTP: " + currentFundOTP + "\n\n(আসল সিস্টেমে এটি ইমেইলে যাবে)");
+      document.getElementById('fundOTP').value = "";
+      showPage('fund-otp', null);
+      startFundOTPTimer();
+    }
+
+    function startFundOTPTimer() {
+      if (fundOtpTimerInterval) clearInterval(fundOtpTimerInterval);
+      fundOtpTimerInterval = setInterval(function() {
+        var remaining = Math.ceil((fundOtpExpiryTime - Date.now()) / 1000);
+        var timerEl = document.getElementById('fundOtpTimer');
+        var bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+        function toBn(num){ return String(num).split('').map(function(d){ return bn[d] || d; }).join(''); }
+        if (remaining <= 0) {
+          clearInterval(fundOtpTimerInterval);
+          if (timerEl) { timerEl.textContent = "⏱️ OTP মেয়াদোত্তীর্ণ! পুনরায় পাঠান।"; timerEl.classList.add('expired'); }
+          currentFundOTP = "";
+        } else if (timerEl) {
+          timerEl.textContent = "⏱️ অবশিষ্ট সময়: " + toBn(remaining) + " সেকেন্ড";
+          timerEl.classList.toggle('expired', remaining <= 15);
+        }
+      }, 1000);
+    }
+
+    function verifyFundOTP() {
+      var inputOTP = document.getElementById('fundOTP').value.trim();
+      if (!inputOTP) { alert("❌ অনুগ্রহ করে OTP দিন।"); return; }
+      if (Date.now() > fundOtpExpiryTime) { alert("❌ OTP মেয়াদোত্তীর্ণ হয়েছে। পুনরায় পাঠান।"); return; }
+      if (inputOTP !== currentFundOTP) { alert("❌ OTP ভুল হয়েছে। আবার চেষ্টা করুন।"); return; }
+      if (fundOtpTimerInterval) clearInterval(fundOtpTimerInterval);
+      document.getElementById('fundDueAmount').value = "১৫০ টাকা";
+      showPage('fund-payment', null);
+    }
+
+    function resendFundOTP() { if (currentFundOTPID) sendFundOTP(currentFundOTPID); }
+
+    function showFundPaymentInfo() {
+      var method = document.getElementById('fundPaymentMethod').value;
+      document.getElementById('fundInfoBkash').style.display = 'none';
+      document.getElementById('fundInfoNagad').style.display = 'none';
+      document.getElementById('fundInfoBank').style.display = 'none';
+      if(method === 'Bkash') document.getElementById('fundInfoBkash').style.display = 'block';
+      if(method === 'Nagad') document.getElementById('fundInfoNagad').style.display = 'block';
+      if(method === 'Bank') document.getElementById('fundInfoBank').style.display = 'block';
+    }
+
+    // ===================== ADMIN FLOW =====================
+    var DEFAULT_ADMIN_ID = "TP21022019";
+    var DEFAULT_ADMIN_PASSWORD = "Adminoftp";
+    var registeredAdmins = {
+      "GJB23102601": { password: "Tmp@4832", role: "Main Admin" }
+    };
+
+    var adminOtpTimerInterval = null, currentAdminOTP = "", currentAdminOTPID = "", adminOtpExpiryTime = 0, currentAdminRole = "";
+
+    function verifyAdminLogin() {
+      var idValue = document.getElementById('adminLoginID').value.trim();
+      var passValue = document.getElementById('adminPassword').value.trim();
+      
+      if(!idValue) { alert("❌ অনুগ্রহ করে অ্যাডমিন আইডি দিন।"); return; }
+      if(!passValue) { alert("❌ অনুগ্রহ করে পাসওয়ার্ড দিন।"); return; }
+      
+      var upperID = idValue.toUpperCase();
+      var role = "";
+      
+      if (upperID === DEFAULT_ADMIN_ID && passValue === DEFAULT_ADMIN_PASSWORD) {
+        role = "Main Admin";
+      } 
+      else if (registeredAdmins[upperID] && registeredAdmins[upperID].password === passValue) {
+        role = registeredAdmins[upperID].role;
+      } 
+      else {
+        alert("❌ ভুল অ্যাডমিন আইডি বা পাসওয়ার্ড।");
+        return;
+      }
+      
+      currentAdminRole = role;
+      sendAdminOTP(upperID);
+    }
+
+    function sendAdminOTP(adminID) {
+      currentAdminOTPID = adminID;
+      currentAdminOTP = Math.floor(100000 + Math.random() * 900000).toString();
+      adminOtpExpiryTime = Date.now() + 60000;
+      alert("📧 ডেমো Admin OTP: " + currentAdminOTP + "\n\n(আসল সিস্টেমে এটি ইমেইলে যাবে)\n\nরোল: " + currentAdminRole);
+      document.getElementById('adminOTP').value = "";
+      showPage('admin-otp', null);
+      startAdminOTPTimer();
+    }
+
+    function startAdminOTPTimer() {
+      if (adminOtpTimerInterval) clearInterval(adminOtpTimerInterval);
+      adminOtpTimerInterval = setInterval(function() {
+        var remaining = Math.ceil((adminOtpExpiryTime - Date.now()) / 1000);
+        var timerEl = document.getElementById('adminOtpTimer');
+        var bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+        function toBn(num){ return String(num).split('').map(function(d){ return bn[d] || d; }).join(''); }
+        if (remaining <= 0) {
+          clearInterval(adminOtpTimerInterval);
+          if (timerEl) { timerEl.textContent = "⏱️ OTP মেয়াদোত্তীর্ণ! পুনরায় পাঠান।"; timerEl.classList.add('expired'); }
+          currentAdminOTP = "";
+        } else if (timerEl) {
+          timerEl.textContent = "⏱️ অবশিষ্ট সময়: " + toBn(remaining) + " সেকেন্ড";
+          timerEl.classList.toggle('expired', remaining <= 15);
+        }
+      }, 1000);
+    }
+
+    function verifyAdminOTP() {
+      var inputOTP = document.getElementById('adminOTP').value.trim();
+      if (!inputOTP) { alert("❌ অনুগ্রহ করে OTP দিন।"); return; }
+      if (Date.now() > adminOtpExpiryTime) { alert("❌ OTP মেয়াদোত্তীর্ণ হয়েছে। পুনরায় পাঠান।"); return; }
+      if (inputOTP !== currentAdminOTP) { alert("❌ OTP ভুল হয়েছে। আবার চেষ্টা করুন।"); return; }
+      
+      if (adminOtpTimerInterval) clearInterval(adminOtpTimerInterval);
+      
+      showPage('admin-role', null);
+    }
+
+    function resendAdminOTP() { if (currentAdminOTPID) sendAdminOTP(currentAdminOTPID); }
+
+    function selectAdminRole(role) {
+      if (role === 'Main Admin') {
+        showPage('main-admin-dashboard', null);
+      } else if (role === 'Office Admin') {
+        showPage('office-admin-dashboard', null);
+      } else if (role === 'Accounts Admin') {
+        alert("✅ আপনি Accounts Admin হিসেবে কাজ করছেন। (ড্যাশবোর্ড শীঘ্রই আসছে)");
+      } else if (role === 'IT Admin') {
+        alert("✅ আপনি IT Admin হিসেবে কাজ করছেন। (ড্যাশবোর্ড শীঘ্রই আসছে)");
+      }
+    }
+
+    // ===================== CREATE POST (NEWS) =====================
+    async function submitCreatePost(event) {
+      event.preventDefault();
+
+      const btn = event.target.querySelector('.form-submit-btn');
+      const originalText = btn.innerHTML;
+
+      const headline = document.getElementById('createPostHeadline').value.trim();
+      const body = document.getElementById('createPostBody').value.trim();
+
+      if (!headline) { alert("❌ অনুগ্রহ করে শিরোনাম দিন।"); return; }
+      if (!body) { alert("❌ অনুগ্রহ করে বিস্তারিত লিখুন।"); return; }
+
+      if (!currentAdminOTPID) {
+        alert("❌ আপনার অ্যাডমিন সেশন পাওয়া যায়নি। আবার লগইন করুন।");
+        return;
+      }
+
+      btn.innerHTML = '⏳ সেভ হচ্ছে...';
+      btn.disabled = true;
+
+      try {
+        const fileInput = document.getElementById('createPostAttachments');
+        const files = fileInput && fileInput.files ? Array.from(fileInput.files) : [];
+        const uploadedUrls = [];
+
+        for (const file of files) {
+          const fd = new FormData();
+          fd.append('file', file);
+          fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+          const isPdf = file.type === 'application/pdf';
+          const endpoint = isPdf ? 'auto' : 'image';
+
+          const cloudRes = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${endpoint}/upload`, {
+            method: 'POST',
+            body: fd
+          });
+          const cloudData = await cloudRes.json();
+          if (cloudData.secure_url) uploadedUrls.push(cloudData.secure_url);
+        }
+
+        const maxRes = await fetch(
+          `${SUPABASE_URL}/rest/v1/news?select=post_number&order=post_number.desc&limit=1`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        const maxData = await maxRes.json();
+        const nextPostNumber = (maxData.length > 0 && maxData[0].post_number)
+          ? maxData[0].post_number + 1
+          : 1;
+
+        const postData = {
+          post_number: nextPostNumber,
+          poster_id: currentAdminOTPID,
+          headline: headline,
+          body: body,
+          status: 'posted',
+          attachments: uploadedUrls
+        };
+
+        const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/news`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(postData)
+        });
+
+        if (!dbRes.ok) {
+          const errText = await dbRes.text();
+          throw new Error('সেভ করা যায়নি: ' + errText);
+        }
+
+        alert("✅ পোস্ট সফলভাবে তৈরি হয়েছে!");
+        event.target.reset();
+        if (typeof loadHomePosts === 'function') loadHomePosts();
+        showPage('office-admin-dashboard', null);
+
+      } catch (error) {
+        alert('❌ সমস্যা হয়েছে: ' + error.message);
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    // ===================== LOAD POSTS FOR EDIT =====================
+    async function loadPostsForEdit() {
+      const tbody = document.getElementById('editPostTbody');
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#b0c4de;">লোড হচ্ছে...</td></tr>';
+
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/news?select=*&order=post_number.desc,timestamp.desc`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        const rows = await res.json();
+
+        const latestMap = {};
+        rows.forEach(r => {
+          if (!latestMap[r.post_number]) latestMap[r.post_number] = r;
+        });
+
+        const posts = Object.values(latestMap)
+          .filter(p => p.status !== 'deleted')
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        if (posts.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#b0c4de;">কোনো পোস্ট নেই।</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = '';
+        posts.forEach((post, idx) => {
+          const tr = document.createElement('tr');
+          tr.style.cursor = 'pointer';
+          tr.onclick = function() { openEditPostForm(post.post_number); };
+          tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td>${formatBengaliDate(post.timestamp)}</td>
+            <td>${escapeHtml(post.headline)}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error('Edit posts load failed:', err);
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#e74c3c;">লোড করা যায়নি।</td></tr>';
+      }
+    }
+
+    // ===================== OPEN EDIT FORM =====================
+    let currentEditAttachments = [];
+
+    async function openEditPostForm(postNumber) {
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/news?post_number=eq.${postNumber}&select=*&order=timestamp.desc&limit=1`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        const data = await res.json();
+        if (data.length === 0) { alert("❌ পোস্ট পাওয়া যায়নি।"); return; }
+
+        const post = data[0];
+        document.getElementById('editPostNumber').value = post.post_number;
+        document.getElementById('editPostDate').textContent = formatBengaliDate(post.timestamp);
+        document.getElementById('editPostHeadline').value = post.headline || '';
+        document.getElementById('editPostBody').value = post.body || '';
+
+        currentEditAttachments = Array.isArray(post.attachments) ? post.attachments.slice() : [];
+        renderEditAttachments();
+
+        const newInput = document.getElementById('editPostNewAttachments');
+        if (newInput) newInput.value = '';
+
+        showPage('edit-post-form', null);
+      } catch (err) {
+        alert('❌ ' + err.message);
+      }
+    }
+
+    function renderEditAttachments() {
+      const grid = document.getElementById('editPostAttachments');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      if (currentEditAttachments.length === 0) {
+        grid.innerHTML = '<p style="color:#b0c4de; font-size:13px;">কোনো মিডিয়া নেই।</p>';
+        return;
+      }
+
+      currentEditAttachments.forEach((url, index) => {
+        const isPdf = url.toLowerCase().endsWith('.pdf');
+        const item = document.createElement('div');
+        item.className = 'attachment-item';
+        item.style.cssText = 'background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 10px; text-align:center;';
+        item.innerHTML = isPdf
+          ? `<div class="file-icon">📄</div><span style="font-size:11px; word-break:break-all; color:#fff;">${url.split('/').pop()}</span>`
+          : `<img src="${url}" alt="Attachment" style="width:100%; border-radius:4px;">`;
+        item.innerHTML += `<button type="button" class="remove-cross" onclick="removeEditAttachment(${index})" style="position:absolute; top:2px; right:2px; background:#e74c3c; color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer;">×</button>`;
+        grid.appendChild(item);
+      });
+    }
+
+    function removeEditAttachment(index) {
+      currentEditAttachments.splice(index, 1);
+      renderEditAttachments();
+    }
+
+    // ===================== SUBMIT EDIT POST =====================
+    async function submitEditPost(event) {
+      event.preventDefault();
+
+      const btn = event.target.querySelector('.form-submit-btn');
+      const originalText = btn.innerHTML;
+
+      const postNumber = parseInt(document.getElementById('editPostNumber').value);
+      const headline = document.getElementById('editPostHeadline').value.trim();
+      const body = document.getElementById('editPostBody').value.trim();
+
+      if (!postNumber) { alert("❌ পোস্ট নম্বর পাওয়া যায়নি।"); return; }
+      if (!headline) { alert("❌ শিরোনাম দিন।"); return; }
+      if (!body) { alert("❌ বিস্তারিত লিখুন।"); return; }
+      if (!currentAdminOTPID) { alert("❌ অ্যাডমিন সেশন নেই। আবার লগইন করুন।"); return; }
+
+      btn.innerHTML = '⏳ আপডেট হচ্ছে...';
+      btn.disabled = true;
+
+      try {
+        const newInput = document.getElementById('editPostNewAttachments');
+        const files = newInput && newInput.files ? Array.from(newInput.files) : [];
+        const uploadedUrls = [];
+
+        for (const file of files) {
+          const fd = new FormData();
+          fd.append('file', file);
+          fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+          const isPdf = file.type === 'application/pdf';
+          const endpoint = isPdf ? 'auto' : 'image';
+
+          const cloudRes = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${endpoint}/upload`, {
+            method: 'POST',
+            body: fd
+          });
+          const cloudData = await cloudRes.json();
+          if (cloudData.secure_url) uploadedUrls.push(cloudData.secure_url);
+        }
+
+        const finalAttachments = currentEditAttachments.concat(uploadedUrls);
+
+        const postData = {
+          post_number: postNumber,
+          poster_id: currentAdminOTPID,
+          headline: headline,
+          body: body,
+          status: 'edited',
+          attachments: finalAttachments
+        };
+
+        const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/news`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(postData)
+        });
+
+        if (!dbRes.ok) {
+          const errText = await dbRes.text();
+          throw new Error('আপডেট করা যায়নি: ' + errText);
+        }
+
+        alert("✅ পোস্ট সফলভাবে আপডেট হয়েছে!");
+        if (typeof loadHomePosts === 'function') loadHomePosts();
+        showPage('office-admin-dashboard', null);
+
+      } catch (err) {
+        alert('❌ ' + err.message);
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    // ===================== LOAD POSTS FOR DELETE =====================
+    async function loadPostsForDelete() {
+      const tbody = document.getElementById('deletePostTbody');
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#b0c4de;">লোড হচ্ছে...</td></tr>';
+
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/news?select=*&order=post_number.desc,timestamp.desc`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        const rows = await res.json();
+
+        const latestMap = {};
+        rows.forEach(r => {
+          if (!latestMap[r.post_number]) latestMap[r.post_number] = r;
+        });
+
+        const posts = Object.values(latestMap)
+          .filter(p => p.status !== 'deleted')
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        if (posts.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#b0c4de;">কোনো পোস্ট নেই।</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = '';
+        posts.forEach((post, idx) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td>${formatBengaliDate(post.timestamp)}</td>
+            <td>${escapeHtml(post.headline)}</td>
+            <td><input type="checkbox" class="delete-post-checkbox" data-post-number="${post.post_number}"></td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error('Delete posts load failed:', err);
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#e74c3c;">লোড করা যায়নি।</td></tr>';
+      }
+    }
+
+    // ===================== SUBMIT DELETE POSTS =====================
+    async function submitDeletePosts() {
+      const checkboxes = document.querySelectorAll('.delete-post-checkbox:checked');
+
+      if (checkboxes.length === 0) {
+        alert("❌ অনুগ্রহ করে অন্তত একটি পোস্ট সিলেক্ট করুন।");
+        return;
+      }
+      if (!currentAdminOTPID) { alert("❌ অ্যাডমিন সেশন নেই। আবার লগইন করুন।"); return; }
+
+      if (!confirm(`আপনি ${checkboxes.length}টি পোস্ট ডিলিট করতে যাচ্ছেন। নিশ্চিত?`)) return;
+
+      try {
+        let successCount = 0;
+
+        for (const cb of checkboxes) {
+          const postNumber = parseInt(cb.getAttribute('data-post-number'));
+
+          const res = await fetch(
+            `${SUPABASE_URL}/rest/v1/news?post_number=eq.${postNumber}&select=headline,body&order=timestamp.desc&limit=1`,
+            { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+          );
+          const data = await res.json();
+          const old = data[0] || { headline: '', body: '' };
+
+          const postData = {
+            post_number: postNumber,
+            poster_id: currentAdminOTPID,
+            headline: old.headline,
+            body: old.body,
+            status: 'deleted'
+          };
+
+          const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/news`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(postData)
+          });
+
+          if (dbRes.ok) successCount++;
+        }
+
+        alert(`✅ ${successCount}টি পোস্ট ডিলিট হয়েছে!`);
+        if (typeof loadHomePosts === 'function') loadHomePosts();
+        showPage('office-admin-dashboard', null);
+
+      } catch (err) {
+        alert('❌ ' + err.message);
+      }
+    }
+
+    // ===================== NOTICES: PUBLIC LIST =====================
+    async function loadNotices() {
+      const tbody = document.getElementById('noticeTbody');
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#b0c4de;">লোড হচ্ছে...</td></tr>';
+
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/notices?select=*&order=notice_number.desc,timestamp.desc`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        const rows = await res.json();
+
+        const latestMap = {};
+        rows.forEach(r => {
+          if (!latestMap[r.notice_number]) latestMap[r.notice_number] = r;
+        });
+
+        const notices = Object.values(latestMap)
+          .filter(n => n.status === 'posted')
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        tbody.innerHTML = '';
+
+        if (notices.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#b0c4de;">কোনো নোটিশ নেই।</td></tr>';
+          return;
+        }
+
+        notices.forEach(n => {
+          const d = new Date(n.timestamp);
+          const isoDate = d.toISOString().split('T')[0];
+          const tr = document.createElement('tr');
+          tr.setAttribute('data-date', isoDate);
+          tr.innerHTML = `
+            <td>${formatBengaliDate(n.timestamp)}</td>
+            <td><b>${escapeHtml(n.title)}</b></td>
+            <td>${n.signed_pdf_url
+              ? `<a href="${n.signed_pdf_url}" target="_blank" class="pdf-link" style="background: rgba(255,0,0,0.1); color: #ff4d4d; padding: 6px 12px; border-radius: 6px; text-decoration:none;">📄 দেখুন</a>`
+              : '<span style="color:#b0c4de;">-</span>'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error('Notices load failed:', err);
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#e74c3c;">লোড করা যায়নি।</td></tr>';
+      }
+    }
+
+    // ===================== NOTICES: CREATE (Pending) =====================
+    async function submitCreateNotice(event) {
+      event.preventDefault();
+
+      const btn = event.target.querySelector('.form-submit-btn');
+      const originalText = btn.innerHTML;
+
+      const title = document.getElementById('createNoticeTitle').value.trim();
+      const body = document.getElementById('createNoticeBody').value.trim();
+
+      if (!title) { alert("❌ শিরোনাম দিন।"); return; }
+      if (!body) { alert("❌ বিস্তারিত লিখুন।"); return; }
+      if (!currentAdminOTPID) { alert("❌ অ্যাডমিন সেশন নেই।"); return; }
+
+      btn.innerHTML = '⏳ PDF তৈরি হচ্ছে...';
+      btn.disabled = true;
+
+      try {
+        const maxRes = await fetch(
+          `${SUPABASE_URL}/rest/v1/notices?select=notice_number&order=notice_number.desc&limit=1`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        const maxData = await maxRes.json();
+        const nextNumber = (maxData.length > 0 && maxData[0].notice_number)
+          ? maxData[0].notice_number + 1
+          : 1;
+
+        const pdfRes = await fetch('/.netlify/functions/generate-notice-pdf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            noticeData: {
+              notice_number: nextNumber,
+              title: title,
+              body: body
+            }
+          })
+        });
+        const pdfData = await pdfRes.json();
+        if (pdfData.status !== 'success') throw new Error('PDF তৈরি ব্যর্থ');
+
+        const pdfBlob = await (await fetch('data:application/pdf;base64,' + pdfData.pdfBase64)).blob();
+        const fd = new FormData();
+        fd.append('file', pdfBlob, `draft-${nextNumber}.pdf`);
+        fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+        const cloudRes = await fetch(
+          `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`,
+          { method: 'POST', body: fd }
+        );
+        const cloudData = await cloudRes.json();
+        if (!cloudData.secure_url) throw new Error('Draft PDF আপলোড ব্যর্থ');
+        const draftPdfUrl = cloudData.secure_url;
+
+        const noticeData = {
+          notice_number: nextNumber,
+          poster_id: currentAdminOTPID,
+          title: title,
+          body: body,
+          draft_pdf_url: draftPdfUrl,
+          signed_pdf_url: '',
+          status: 'pending'
+        };
+
+        const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/notices`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(noticeData)
+        });
+
+        if (!dbRes.ok) {
+          const errText = await dbRes.text();
+          throw new Error('সেভ করা যায়নি: ' + errText);
+        }
+
+        alert("✅ নোটিশ তৈরি হয়েছে (Pending)! এখন সাইন করে আপলোড করুন।");
+        event.target.reset();
+        showPage('office-admin-dashboard', null);
+
+      } catch (err) {
+        alert('❌ ' + err.message);
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    // ===================== NOTICES: PENDING LIST =====================
+    async function loadPendingNotices() {
+      const tbody = document.getElementById('pendingNoticesTbody');
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#b0c4de;">লোড হচ্ছে...</td></tr>';
+
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/notices?select=*&order=notice_number.desc,timestamp.desc`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        const rows = await res.json();
+
+        const latestMap = {};
+        rows.forEach(r => {
+          if (!latestMap[r.notice_number]) latestMap[r.notice_number] = r;
+        });
+
+        const pending = Object.values(latestMap)
+          .filter(n => n.status === 'pending')
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        tbody.innerHTML = '';
+
+        if (pending.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#b0c4de;">কোনো Pending নোটিশ নেই।</td></tr>';
+          return;
+        }
+
+        pending.forEach((n, idx) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td>${formatBengaliDate(n.timestamp)}</td>
+            <td>${escapeHtml(n.title)}</td>
+            <td>
+              <a href="${n.draft_pdf_url}" target="_blank" class="pdf-link" style="margin-right:6px; background: rgba(255,255,255,0.1); color:#fff; padding: 6px 12px; border-radius: 6px; text-decoration:none;">🖨️ প্রিন্ট</a>
+              <button onclick="openSignedUpload(${n.notice_number})" style="background:#27ae60; color:white; border:none; border-radius:6px; padding:6px 10px; font-size:12px; cursor:pointer;">📤 সাইন আপলোড</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error('Pending notices load failed:', err);
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#e74c3c;">লোড করা যায়নি।</td></tr>';
+      }
+    }
+
+    // ===================== OPEN SIGNED UPLOAD =====================
+    async function openSignedUpload(noticeNumber) {
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/notices?notice_number=eq.${noticeNumber}&status=eq.pending&select=*&order=timestamp.desc&limit=1`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        const data = await res.json();
+        if (data.length === 0) { alert("❌ Pending নোটিশ পাওয়া যায়নি।"); return; }
+
+        const n = data[0];
+        document.getElementById('uploadNoticeNumber').value = n.notice_number;
+        document.getElementById('uploadNoticeTitle').value = n.title;
+        document.getElementById('uploadDraftLink').innerHTML =
+          `<a href="${n.draft_pdf_url}" target="_blank" class="pdf-link" style="background: rgba(255,255,255,0.1); color:#fff; padding: 6px 12px; border-radius: 6px; text-decoration:none;">🖨️ Draft PDF প্রিন্ট করুন</a>`;
+        document.getElementById('signedPdfFile').value = '';
+
+        showPage('upload-signed-notice', null);
+      } catch (err) {
+        alert('❌ ' + err.message);
+      }
+    }
+
+    // ===================== SUBMIT SIGNED PDF =====================
+    async function submitSignedNotice() {
+      const btn = document.querySelector('#upload-signed-notice .form-submit-btn');
+      const originalText = btn.innerHTML;
+
+      const noticeNumber = parseInt(document.getElementById('uploadNoticeNumber').value);
+      const title = document.getElementById('uploadNoticeTitle').value;
+      const file = document.getElementById('signedPdfFile').files[0];
+
+      if (!noticeNumber) { alert("❌ নোটিশ নম্বর নেই।"); return; }
+      if (!file) { alert("❌ সাইন করা PDF আপলোড করুন।"); return; }
+      if (!currentAdminOTPID) { alert("❌ অ্যাডমিন সেশন নেই।"); return; }
+
+      btn.innerHTML = '⏳ আপলোড হচ্ছে...';
+      btn.disabled = true;
+
+      try {
+        const fd = new FormData();
+        fd.append('file', file);
+        fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+        const cloudRes = await fetch(
+          `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`,
+          { method: 'POST', body: fd }
+        );
+        const cloudData = await cloudRes.json();
+        if (!cloudData.secure_url) throw new Error('PDF আপলোড ব্যর্থ');
+        const signedPdfUrl = cloudData.secure_url;
+
+        const oldRes = await fetch(
+          `${SUPABASE_URL}/rest/v1/notices?notice_number=eq.${noticeNumber}&select=body,draft_pdf_url&order=timestamp.desc&limit=1`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        const oldData = await oldRes.json();
+        const old = oldData[0] || { body: '', draft_pdf_url: '' };
+
+        const noticeData = {
+          notice_number: noticeNumber,
+          poster_id: currentAdminOTPID,
+          title: title,
+          body: old.body,
+          draft_pdf_url: old.draft_pdf_url,
+          signed_pdf_url: signedPdfUrl,
+          status: 'posted'
+        };
+
+        const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/notices`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(noticeData)
+        });
+
+        if (!dbRes.ok) {
+          const errText = await dbRes.text();
+          throw new Error('সেভ করা যায়নি: ' + errText);
+        }
+
+        alert("✅ নোটিশ সফলভাবে পাবলিশ হয়েছে!");
+        if (typeof loadNotices === 'function') loadNotices();
+        showPage('notice', null);
+
+      } catch (err) {
+        alert('❌ ' + err.message);
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    // ===================== DELETE NOTICES =====================
+    async function loadNoticesForDelete() {
+      const tbody = document.getElementById('deleteNoticeTbody');
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#b0c4de;">লোড হচ্ছে...</td></tr>';
+
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/notices?select=*&order=notice_number.desc,timestamp.desc`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        const rows = await res.json();
+
+        const latestMap = {};
+        rows.forEach(r => {
+          if (!latestMap[r.notice_number]) latestMap[r.notice_number] = r;
+        });
+
+        const notices = Object.values(latestMap)
+          .filter(n => n.status !== 'deleted')
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        tbody.innerHTML = '';
+
+        if (notices.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#b0c4de;">কোনো নোটিশ নেই।</td></tr>';
+          return;
+        }
+
+        notices.forEach((n, idx) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td>${formatBengaliDate(n.timestamp)}</td>
+            <td>${escapeHtml(n.title)}</td>
+            <td><input type="checkbox" class="delete-notice-checkbox" data-notice-number="${n.notice_number}"></td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error('Delete notices load failed:', err);
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#e74c3c;">লোড করা যায়নি।</td></tr>';
+      }
+    }
+
+    async function submitDeleteNotices() {
+      const checkboxes = document.querySelectorAll('.delete-notice-checkbox:checked');
+
+      if (checkboxes.length === 0) {
+        alert("❌ অন্তত একটি নোটিশ সিলেক্ট করুন।");
+        return;
+      }
+      if (!currentAdminOTPID) { alert("❌ অ্যাডমিন সেশন নেই।"); return; }
+
+      if (!confirm(`আপনি ${checkboxes.length}টি নোটিশ ডিলিট করতে যাচ্ছেন। নিশ্চিত?`)) return;
+
+      try {
+        let successCount = 0;
+
+        for (const cb of checkboxes) {
+          const noticeNumber = parseInt(cb.getAttribute('data-notice-number'));
+
+          const res = await fetch(
+            `${SUPABASE_URL}/rest/v1/notices?notice_number=eq.${noticeNumber}&select=title,body,draft_pdf_url,signed_pdf_url&order=timestamp.desc&limit=1`,
+            { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+          );
+          const data = await res.json();
+          const old = data[0] || { title: '', body: '', draft_pdf_url: '', signed_pdf_url: '' };
+
+          const noticeData = {
+            notice_number: noticeNumber,
+            poster_id: currentAdminOTPID,
+            title: old.title,
+            body: old.body,
+            draft_pdf_url: old.draft_pdf_url,
+            signed_pdf_url: old.signed_pdf_url,
+            status: 'deleted'
+          };
+
+          const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/notices`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(noticeData)
+          });
+
+          if (dbRes.ok) successCount++;
+        }
+
+        alert(`✅ ${successCount}টি নোটিশ ডিলিট হয়েছে!`);
+        if (typeof loadNotices === 'function') loadNotices();
+        showPage('office-admin-dashboard', null);
+
+      } catch (err) {
+        alert('❌ ' + err.message);
+      }
+    }
+  
+    // ===================== ADD ADMIN =====================
+    var selectedMemberData = null;
+
+    function verifyAdminMemberID() {
+      var idValue = document.getElementById('addAdminID').value.trim().toUpperCase();
+      if (!idValue) { alert("❌ অনুগ্রহ করে মেম্বার আইডি দিন।"); return; }
+
+      if (idValue === "GJB23102601") {
+        selectedMemberData = {
+          id: idValue,
+          name: "জর্জ জগরতা বারুয়া",
+          designation: "Member",
+          email: "george@example.com",
+          picture: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+        };
+        document.getElementById('addAdminPrevImg').src = selectedMemberData.picture;
+        document.getElementById('addAdminName').value = selectedMemberData.name;
+        document.getElementById('addAdminDesignation').value = selectedMemberData.designation;
+        document.getElementById('addAdminEmail').value = selectedMemberData.email;
+        document.getElementById('addAdminVerifyBox').style.display = 'none';
+        document.getElementById('addAdminFormBox').style.display = 'block';
+      } else {
+        alert("❌ এই আইডিতে কোনো মেম্বার পাওয়া যায়নি। (ডেমো: GJB23102601)");
+      }
+    }
+
+    function submitAddAdmin() {
+      var email = document.getElementById('addAdminEmail').value.trim();
+      var role = document.getElementById('addAdminRole').value;
+      var statusDiv = document.getElementById('addAdminStatus');
+
+      if (!email) { statusDiv.className = "status status-error"; statusDiv.innerHTML = "❌ ইমেইল দিন।"; return; }
+      if (!role) { statusDiv.className = "status status-error"; statusDiv.innerHTML = "❌ অ্যাডমিন রোল সিলেক্ট করুন।"; return; }
+
+      if (selectedMemberData) {
+        registeredAdmins[selectedMemberData.id] = {
+          password: "Tmp@4832",
+          role: role,
+          email: email
+        };
+      }
+
+      statusDiv.className = "status status-success";
+      statusDiv.innerHTML = "✅ সফলভাবে " + role + " হিসেবে অ্যাডমিন যোগ করা হয়েছে!";
+      
+      setTimeout(function() {
+        document.getElementById('addAdminVerifyBox').style.display = 'block';
+        document.getElementById('addAdminFormBox').style.display = 'none';
+        document.getElementById('addAdminID').value = "";
+        document.getElementById('addAdminRole').value = "";
+        statusDiv.innerHTML = "";
+        showPage('admin-control', null);
+      }, 2000);
+    }
+
+    // ===================== REMOVE ADMIN =====================
+    var selectedRemoveAdmin = null;
+
+    function loadAdminsForRemove() {
+      var role = document.getElementById('removeAdminRoleSelect').value;
+      var listDiv = document.getElementById('removeAdminList');
+      if (!role) { listDiv.innerHTML = ""; return; }
+      listDiv.innerHTML = "<p style='text-align:center; color:#4da3ff;'>লোড হচ্ছে...</p>";
+
+      var demoAdmins = [
+        {
+          name: "জর্জ জগরতা বারুয়া",
+          designation: "Main Admin",
+          id: "GJB23102601",
+          role: role,
+          picture: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+        },
+        {
+          name: "সুমন বড়ুয়া",
+          designation: "IT Admin",
+          id: "SB23102602",
+          role: role,
+          picture: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+        }
+      ];
+
+      var html = "";
+      demoAdmins.forEach(function(admin, index) {
+        html += `<div class="admin-list-item" onclick="selectAdminForRemove(${index})" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:15px; margin-bottom:10px; display:flex; align-items:center; gap:15px; cursor:pointer;">
+          <img src="${admin.picture}" alt="${admin.name}" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid #4da3ff;">
+          <div class="info">
+            <h4 style="color:#fff; margin:0 0 4px 0;">${admin.name}</h4>
+            <p style="color:#b0c4de; margin:2px 0; font-size:13px;"><b>পদবি:</b> ${admin.designation}</p>
+            <p style="color:#b0c4de; margin:2px 0; font-size:13px;"><b>ID:</b> ${admin.id}</p>
+          </div>
+        </div>`;
+      });
+      listDiv.innerHTML = html;
+      window.demoAdminList = demoAdmins;
+    }
+
+    function selectAdminForRemove(index) {
+      var admin = window.demoAdminList[index];
+      selectedRemoveAdmin = admin;
+      document.getElementById('removeAdminPreview').style.display = 'flex';
+      document.getElementById('removeAdminPreviewImg').src = admin.picture;
+      document.getElementById('removeAdminPreviewName').innerText = admin.name;
+      document.getElementById('removeAdminPreviewDesignation').innerText = "পদবি: " + admin.designation;
+      document.getElementById('removeAdminPreviewID').innerText = "ID: " + admin.id;
+      showPage('remove-admin-confirm', null);
+    }
+
+    function submitRemoveAdmin() {
+      var reason = document.getElementById('removeAdminReason').value.trim();
+      var statusDiv = document.getElementById('removeAdminStatus');
+      if (!reason) { statusDiv.className = "status status-error"; statusDiv.innerHTML = "❌ অব্যাহতির কারণ লিখুন।"; return; }
+
+      statusDiv.className = "status status-success";
+      statusDiv.innerHTML = "✅ সফলভাবে " + selectedRemoveAdmin.name + " কে রিমুভ করা হয়েছে!";
+
+      setTimeout(function() {
+        document.getElementById('removeAdminReason').value = "";
+        statusDiv.innerHTML = "";
+        document.getElementById('removeAdminPreview').style.display = 'none';
+        showPage('admin-control', null);
+      }, 2000);
+    }
+
+    // ===================== NOTICE FILTER =====================
+    function filterNotices() {
+      var searchText = document.getElementById("searchInput").value.toLowerCase();
+      var startDate = document.getElementById("startDate").value;
+      var endDate = document.getElementById("endDate").value;
+      var table = document.getElementById("noticeTable");
+      var tr = table.getElementsByTagName("tr");
+
+      for (var i = 1; i < tr.length; i++) {
+        var tdDate = tr[i].getElementsByTagName("td")[0];
+        var tdTitle = tr[i].getElementsByTagName("td")[1];
+        if (tdDate && tdTitle) {
+          var dateText = tdDate.textContent || tdDate.innerText;
+          var titleText = tdTitle.textContent || tdTitle.innerText;
+          var matchText = dateText.toLowerCase().indexOf(searchText) > -1 || titleText.toLowerCase().indexOf(searchText) > -1;
+          var rowDateStr = tr[i].getAttribute("data-date");
+          var matchDate = true;
+          if (startDate && rowDateStr < startDate) matchDate = false;
+          if (endDate && rowDateStr > endDate) matchDate = false;
+          tr[i].style.display = (matchText && matchDate) ? "" : "none";
+        }
+      }
+    }
+
+
+    // ===================== DYNAMIC MEMBERSHIP TABLE =====================
+    function renderMembershipTable() {
+      var tbody = document.getElementById('membershipTbody');
+      var search = document.getElementById('memberSearchInput').value.toLowerCase().trim();
+      tbody.innerHTML = '';
+      var visibleCount = 0;
+
+      var activeCount = membersData.filter(function(m){ return m.active; }).length;
+      var inactiveCount = membersData.filter(function(m){ return !m.active; }).length;
+      
+      document.getElementById('totalMembers').innerText = membersData.length;
+      document.getElementById('activeMembers').innerText = activeCount;
+      document.getElementById('inactiveMembers').innerText = inactiveCount;
+
+      membersData.forEach(function(m) {
+        if (search && m.id.toLowerCase().indexOf(search) === -1 && m.name.toLowerCase().indexOf(search) === -1) return;
+        
+        visibleCount++;
+        var tr = document.createElement('tr');
+        tr.style.cursor = 'pointer';
+        
+        var statusHtml = m.active 
+          ? `<span style="background: rgba(39, 174, 96, 0.2); color: #2ecc71; padding: 4px 10px; border-radius: 12px; font-size: 12px;">সক্রিয়</span>` 
+          : `<span style="background: rgba(231, 76, 60, 0.2); color: #e74c3c; padding: 4px 10px; border-radius: 12px; font-size: 12px;">নিষ্ক্রিয়</span>`;
+
+        tr.innerHTML = `
+          <td><b>${m.id}</b></td>
+          <td>
+            <img src="${m.image}" class="membership-avatar" alt="Member" style="width:30px; height:30px; border-radius:50%; margin-right:8px; vertical-align:middle;">
+            ${m.name}
+          </td>
+          <td>${m.phone}</td>
+          <td>${m.designation}</td>
+          <td>${statusHtml}</td>
+        `;
+
+        tr.onclick = function() {
+          selectedMemberId = m.id;
+          if (m.active) {
+            goToRemovePage(m);
+          } else {
+            goToRestorePage(m);
+          }
+        };
+
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('membershipEmpty').style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    // ===================== NAVIGATE TO ACTION PAGES =====================
+    function goToRemovePage(member) {
+      document.getElementById('removeMemberImg').src = member.image;
+      document.getElementById('removeMemberName').innerText = member.name;
+      document.getElementById('removeMemberID').innerText = 'ID: ' + member.id;
+      document.getElementById('removeMemberRole').innerText = member.designation;
+      document.getElementById('removeRemarksInput').value = ''; 
+
+      showPage('remove-member-action', null);
+    }
+
+    function goToRestorePage(member) {
+      document.getElementById('restoreMemberImg').src = member.image;
+      document.getElementById('restoreMemberName').innerText = member.name;
+      document.getElementById('restoreMemberID').innerText = 'ID: ' + member.id;
+      document.getElementById('restoreMemberRole').innerText = member.designation;
+      document.getElementById('restoreRemarksInput').value = ''; 
+
+      showPage('restore-member-action', null);
+    }
+
+    // ===================== SUBMIT ACTIONS =====================
+    function submitRemoveAction() {
+      var remarks = document.getElementById('removeRemarksInput').value.trim();
+      if (!remarks) {
+        alert("❌ অনুগ্রহ করে রিমুভ করার কারণ লিখুন।");
+        return;
+      }
+
+      var memberIndex = membersData.findIndex(function(m) { return m.id === selectedMemberId; });
+      if (memberIndex !== -1) {
+        membersData[memberIndex].active = false;
+        membersData[memberIndex].remarks = remarks;
+        
+        document.getElementById('successMessage').innerText = "✅ " + membersData[memberIndex].name + " কে সফলভাবে রিমুভ করা হয়েছে।";
+        showPage('action-success', null);
+      }
+    }
+
+    function submitRestoreAction() {
+      var remarks = document.getElementById('restoreRemarksInput').value.trim();
+      if (!remarks) {
+        alert("❌ অনুগ্রহ করে রিস্টোর করার কারণ লিখুন।");
+        return;
+      }
+
+      var memberIndex = membersData.findIndex(function(m) { return m.id === selectedMemberId; });
+      if (memberIndex !== -1) {
+        membersData[memberIndex].active = true;
+        membersData[memberIndex].remarks = remarks;
+        
+        document.getElementById('successMessage').innerText = "✅ " + membersData[memberIndex].name + " কে সফলভাবে রিস্টোর করা হয়েছে।";
+        showPage('action-success', null);
+      }
+    }
+
+  </script>
+
+</body>
+</html>
